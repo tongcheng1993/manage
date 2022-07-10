@@ -63,7 +63,7 @@
             <el-dialog :visible.sync="dialogFlag">
                 <el-upload
                         class="upload-demo"
-                        action="/api/file/uploadFile"
+                        action="/api/sys/file/uploadFile"
                         :headers = "uploadHeader"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"

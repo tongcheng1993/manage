@@ -4,7 +4,7 @@
             <div v-bind:key="menu" v-if="menu.showFlag && menu.showFlag > 0">
                 <el-submenu
                         :index="menu.path"
-                        v-if="menu.children.length > 0 && haveOneChildrenShow(menu.children)"
+                        v-if="menu.children && menu.children.length > 0 && haveOneChildrenShow(menu.children)"
                 >
                     <template slot="title">
                         <i :class="menu.iconFlag"></i>
@@ -15,7 +15,7 @@
                 <el-menu-item
                         :index="menu.path"
                         :key="menu.id"
-                        v-if="!menu.children.length > 0"
+                        v-else
                 >
                     <i :class="menu.iconFlag"></i>
                     <span slot="title">{{ menu.name }}</span>
@@ -48,14 +48,8 @@
         methods: {
             haveOneChildrenShow(children) {
                 for (let i = 0; i < children.length; i++) {
-                    if (children[i].children.length > 0) {
-                        if (this.haveOneChildrenShow(children[i].children)) {
-                            return true;
-                        }
-                    } else {
-                        if (children[i].showFlag > 0) {
-                            return true;
-                        }
+                    if (children[i].showFlag > 0) {
+                        return true;
                     }
                 }
                 return false;

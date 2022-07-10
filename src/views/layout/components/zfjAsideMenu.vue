@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import {createTree} from '../../../util/treeUtil'
+
     import zfjMenuTemple from './zfjMenuTemple'
 
     export default {
@@ -22,7 +22,9 @@
         props: {},
         methods: {
             init() {
-                this.menuList = createTree(this.$store.state.menu);
+                let tempMenu = this.$store.state.menu;
+                console.log(tempMenu)
+                this.menuList = tempMenu
             },
             handleOpen(key, keyPath) {
                 console.log(key)

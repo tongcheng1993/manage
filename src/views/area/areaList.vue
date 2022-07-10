@@ -114,7 +114,10 @@
             queryTreeArea() {
                 let parameter = this.areaQo
                 queryListArea(parameter).then((res) => {
-                    this.areaTree = createTree(res)
+                    let parent = {
+                        "id": "0"
+                    }
+                    this.areaTree = createTree(res, parent)
                 })
             },
 

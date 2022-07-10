@@ -6,12 +6,17 @@ import store from '../store/index.js'
 import { getMenu } from '../api/loginApi'
 import { createTree } from '../util/treeUtil'
 
-// Vue.use(VueRouter)
+Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/login',
         name: 'login',
+        component: () => import('@/views/login/login.vue'),
+    },
+    {
+        path: '/hehe',
+        name: 'hehe',
         component: () => import('@/views/login/login.vue'),
     },
     {
@@ -32,24 +37,19 @@ const router = new VueRouter({
     routes
 })
 
-
+function loadPageByRoutes (str) {
+    return function (resolve) {
+        require([`@/views${str}.vue`], resolve)
+    }
+}
 
 function filterAsyncRouter(asyncRouterMap) {
     asyncRouterMap.filter(route => {
-        if (route.children.length > 0) {
-            if (route.component) {
-                const str = route.component
-                route.component = resolve => require(['@/views' + str + '.vue'], resolve)
-            } else {
-                route.component = resolve => require(['@/views' + '/layout/blank' + '.vue'], resolve)
-            }
+        if (route.component) {
+            route.component = loadPageByRoutes(route.component)
         } else {
-            if (route.component) {
-                const str = route.component
-                route.component = resolve => require(['@/views' + str + '.vue'], resolve)
-            } else {
-                route.component = resolve => require(['@/views' + '/layout/blank' + '.vue'], resolve)
-            }
+            let str = "/layout/blank";
+            route.component = loadPageByRoutes(str)
         }
         if (route.children && route.children.length) {
             route.children = filterAsyncRouter(route.children)
@@ -71,26 +71,27 @@ router.beforeEach((to, from, next) => {
             });
         } else {
             //登陆后用户单独路由是否加载完成
+            console.log(store.state.menu.length)
             if (store.state.menu.length === 0) {
                 getMenu({}).then((res) => {
-                    let menu = createTree(res)
+                    let parent = {
+                        id: '0',
+                        path: '/',
+                        name: 'container',
+                        component: '/layout/container',
+                        children: []
+                    }
+                    parent = createTree(res, parent)
+                    let menu = []
+                    menu.push(parent)
                     let aa = filterAsyncRouter(menu)
-                    const routers = [
-                        {
-                            path: '/',
-                            name: 'container',
-                            component: () => import('@/views/layout/container.vue'),
-                            children: []
-                        },
-                        {
-                            path: '/*',
-                            name: 'lost404',
-                            component: () => import('@/views/lost404/lost404.vue')
-                        }
-                    ]
-                    routers[0].children = aa
-                    router.addRoutes(routers)
-                    store.commit("set_menu", res)
+                    aa.push({
+                        path: '/*',
+                        name: 'lostError',
+                        component: () => import('@/views/lost404/lost404.vue')
+                    })
+                    router.addRoutes(aa)
+                    store.commit("set_menu", parent.children)
                     next({ ...to, replace: true })
                 })
             } else {

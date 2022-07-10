@@ -7,7 +7,7 @@ module.exports = {
             'vue-router': 'VueRouter',
             'axios': 'axios',
             'element-ui':'ELEMENT',
-            'NProgress': 'NProgress',
+            'nprogress': 'NProgress',
             'wangeditor': 'wangeditor',
             'echarts': 'echarts',
         },

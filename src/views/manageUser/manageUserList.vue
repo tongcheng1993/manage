@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view_div">
         <div>
             <el-form v-model="dataQo">
                 <el-row>

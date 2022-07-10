@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view_div">
         <div>
             <el-row>
                 <el-col :span="12">
@@ -28,7 +28,8 @@
                                 <el-row>
                                     <el-col :span="12">
                                         <el-form-item label="上级id">
-                                            <el-input v-model="dataDetail.parentId" :disabled="dataDetailItemFlag"></el-input>
+                                            <el-input v-model="dataDetail.parentId"
+                                                      :disabled="dataDetailItemFlag"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
@@ -38,36 +39,46 @@
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="排序">
-                                            <el-input v-model="dataDetail.sortNum" :disabled="dataDetailItemFlag"></el-input>
+                                            <el-input v-model="dataDetail.sortNum"
+                                                      :disabled="dataDetailItemFlag"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="名字">
-                                            <el-input v-model="dataDetail.name" :disabled="dataDetailItemFlag"></el-input>
+                                            <el-input v-model="dataDetail.name"
+                                                      :disabled="dataDetailItemFlag"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="路径">
-                                            <el-input v-model="dataDetail.path" :disabled="dataDetailItemFlag"></el-input>
+                                            <el-input v-model="dataDetail.path"
+                                                      :disabled="dataDetailItemFlag"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="组件地址">
-                                            <el-input v-model="dataDetail.component" :disabled="dataDetailItemFlag"></el-input>
+                                            <el-input v-model="dataDetail.component"
+                                                      :disabled="dataDetailItemFlag"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="是否展示">
-                                            <el-input v-model="dataDetail.showFlag" :disabled="dataDetailItemFlag"></el-input>
+                                            <el-input v-model="dataDetail.showFlag"
+                                                      :disabled="dataDetailItemFlag"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="图标">
-                                            <el-input v-model="dataDetail.iconFlag" :disabled="dataDetailItemFlag"></el-input>
+                                            <el-input v-model="dataDetail.iconFlag"
+                                                      :disabled="dataDetailItemFlag"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <el-row><el-col><el-button @click="saveMenu()">保存</el-button></el-col></el-row>
+                                <el-row>
+                                    <el-col>
+                                        <el-button @click="saveMenu()">保存</el-button>
+                                    </el-col>
+                                </el-row>
                             </el-form>
                         </el-col>
                     </el-row>
@@ -78,7 +89,7 @@
 </template>
 
 <script>
-    import {saveMenu,queryListMenu} from "../../api/manageUserApi";
+    import {saveMenu, queryListMenu} from "../../api/manageUserApi";
     import {createTree} from "../../util/treeUtil";
 
     export default {
@@ -95,16 +106,16 @@
                 dataDetailTitle: "",
                 dataDetailFormTop: "right",
                 dataDetail: {
-                    parentId:"",
-                    sortNum:"",
-                    id:"",
-                    name:"",
-                    path:"",
-                    component:"",
-                    showFlag:"",
-                    iconFlag:"",
+                    parentId: "",
+                    sortNum: "",
+                    id: "",
+                    name: "",
+                    path: "",
+                    component: "",
+                    showFlag: "",
+                    iconFlag: "",
                 },
-                dataDetailItemFlag:true,
+                dataDetailItemFlag: true,
                 defaultProps: {
                     children: "children",
                     label: "name",
@@ -119,7 +130,6 @@
                 handler(newValue, oldValue) {
                     console.log("new", newValue);
                     console.log("old", oldValue);
-                    this.treeList = createTree(newValue);
                 },
                 deep: true,
             },
@@ -143,44 +153,48 @@
                 queryListMenu(parameter)
                     .then((res) => {
                         this.dataList = res;
+                        let parent = {
+                            id: '0',
+                            path: '/',
+                            name: 'container',
+                            component: '/layout/container',
+                            children: []
+                        }
+                        parent = createTree(res, parent);
+
+                        this.treeList = parent.children
                     })
                     .catch((err) => {
                     });
             },
             // 保存路由
-            saveMenu(){
-              let parameter= this.dataDetail
-                saveMenu(parameter).then((res)=>{
-                    if(res){
-                        let parameter = this.dataQo;
-                        queryListMenu(parameter)
-                            .then((res) => {
-                                this.dataList = res;
-                                this.dataDetailItemFlag = true
-                            })
-                            .catch((err) => {
-                            });
+            saveMenu() {
+                let parameter = this.dataDetail
+                saveMenu(parameter).then((res) => {
+                    if (res) {
+                        this.queryListMenu();
+                        this.dataDetailItemFlag = true;
                     }
-                }).catch((err)=>{
+                }).catch((err) => {
 
                 })
             },
-            openTopMenu(){
+            openTopMenu() {
                 this.dataDetail = {
-                    parentId : 0
+                    parentId: 0
                 }
                 this.dataDetailItemFlag = false;
             },
             // 打开下级路由
-            openNextMenu(){
+            openNextMenu() {
                 let temp = this.dataDetail
                 this.dataDetail = {
-                    parentId : temp.id
+                    parentId: temp.id
                 }
                 this.dataDetailItemFlag = false;
             },
             // 打开编辑路由
-            openEditMenu(){
+            openEditMenu() {
                 this.dataDetailItemFlag = false;
             },
         },

@@ -59,6 +59,9 @@
 </script>
 
 <style scoped>
+    .el-header{
+        padding: 0;
+    }
     .a_container {
         overflow: auto;
         height: 100%;
