@@ -195,6 +195,7 @@
                     orders: [],
                     fileName: "",
                 },
+                fileList:[],
                 dialogFlag: false,
             };
         },

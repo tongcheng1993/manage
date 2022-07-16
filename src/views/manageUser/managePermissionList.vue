@@ -179,7 +179,7 @@
                     if(res&&res>0){
                         this.dataDetail = {}
                         this.queryPageData()
-                        this.dataDetailFlag = true
+                        this.dataDetailFlag = false
                     }
                 }).catch((err) => {
 

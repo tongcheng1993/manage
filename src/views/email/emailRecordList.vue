@@ -1,7 +1,41 @@
 <template>
     <div class="view_div">
         <div>
-            <el-button>发送邮件</el-button>
+            <el-form>
+                <el-row>
+                    <el-col>
+                        收件人：
+                        <el-input v-model="dataQo.addrTo"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col>
+                        <el-button>查询</el-button>
+                        <el-button @click="queryPageData()">重置</el-button>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        <div>
+            <el-button @click="openDialog1()">发送邮件</el-button>
+        </div>
+        <div>
+            <el-table :data="page.records">
+                <el-table-column type="selection"></el-table-column>
+                <el-table-column prop="addrTo" label="收件人"></el-table-column>
+                <el-table-column prop="subject" label="标题"></el-table-column>
+                <el-table-column prop="content" label="邮件内容"></el-table-column>
+            </el-table>
+            <el-pagination
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="page.total"
+                    :page-size="page.size"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="page.current"
+                    :page-sizes="[10, 50, 100]"
+            >
+            </el-pagination>
         </div>
         <div>
             <el-dialog :visible.sync="dialog_1">
@@ -9,15 +43,42 @@
                     <el-row>
                         <el-col>
                             收件人：
+                            <el-input v-model="sendEmailForm.to"></el-input>
                         </el-col>
                         <el-col>
                             标题：
+                            <el-input v-model="sendEmailForm.subject"></el-input>
                         </el-col>
                         <el-col>
-                            收件人：
+                            内容：
+                            <el-input v-model="sendEmailForm.content"></el-input>
                         </el-col>
                         <el-col>
-                            收件人：
+                            附件：
+                            <el-upload
+                                    class="upload-demo"
+                                    action="/api/sys/file/uploadFile"
+                                    :headers="uploadHeader"
+                                    :on-preview="handlePreview"
+                                    :on-remove="handleRemove"
+                                    :on-success="handleSuccess"
+                                    :before-remove="beforeRemove"
+                                    multiple
+                                    :limit="3"
+                                    :on-exceed="handleExceed"
+                                    :file-list="fileList"
+                            >
+                                <el-button size="small" type="primary">点击上传</el-button>
+                                <div slot="tip" class="el-upload__tip">
+
+                                </div>
+                            </el-upload>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col>
+                            <el-button>关闭</el-button>
+                            <el-button @click="sendEmail()">发送</el-button>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -27,6 +88,8 @@
 </template>
 
 <script>
+    import {sendEmail, queryPageEmailRecord} from '../../api/emailApi.js'
+
     export default {
         name: "emailRecordList",
         // 引用组件
@@ -47,16 +110,28 @@
                     current: 0,
                     size: 10,
                     orders: [],
+                    addrTo: "",
                 },
                 dialog_1: false,
                 dataDetailFlag: false,
                 dataDetailTitle: "",
                 dataDetailFormTop: "right",
                 dataDetail: {},
+                fileList: [],
+                sendEmailForm: {
+                    to: "",
+                    subject: "",
+                    content: "",
+                    fileIdList: [],
+                },
             };
         },
         // 本页面计算属性
-        computed: {},
+        computed: {
+            uploadHeader() {
+                return {"Tc-Token": this.$store.state.token}
+            }
+        },
         // 本页面监听属性
         watch: {
             page: {
@@ -69,6 +144,26 @@
         },
 
         methods: {
+            handlePreview(file) {
+                console.log(file);
+                console.log('handlePreview');
+            },
+            handleSuccess(response, file, fileList) {
+
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            beforeRemove(file, fileList) {
+                return this.$confirm(`确定移除 ${file.name}？`);
+            },
+            handleExceed(files, fileList) {
+                this.$message.warning(
+                    `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+                    files.length + fileList.length
+                        } 个文件`
+                );
+            },
             handleSizeChange(val) {
                 console.log(`每页  条`);
                 this.dataQo.size = val;
@@ -94,8 +189,22 @@
             // 查询数据
             queryPageData() {
                 let parameter = this.dataQo;
-            },
+                queryPageEmailRecord(parameter).then((res) => {
+                    this.page = res
 
+                }).catch()
+            },
+            openDialog1() {
+                this.dialog_1 = true;
+            },
+            sendEmail() {
+                let parameter = this.sendEmailForm;
+                sendEmail(parameter).then((res) => {
+                    this.sendEmailForm = {};
+                    this.dialog_1 = false;
+                    this.queryPageData();
+                }).catch()
+            },
         },
         mounted() {
             this.init();

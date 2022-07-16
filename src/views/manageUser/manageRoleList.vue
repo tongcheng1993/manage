@@ -15,7 +15,7 @@
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="editRole(scope)">编辑</el-dropdown-item>
-                                <el-dropdown-item @click.native="openRolePermissionRelation()">授予后台方法</el-dropdown-item>
+                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法</el-dropdown-item>
                                 <el-dropdown-item @click.native="openRoleMenuRelation(scope)">授予页面路由</el-dropdown-item>
 
                                 <el-dropdown-item @click.native="">删除</el-dropdown-item>
@@ -74,7 +74,7 @@
                         default-expand-all
                         :props="defaultProps"
                         :default-checked-keys="menuKeys"
-                        check-strictly = "true"
+                        check-strictly="true"
                         @node-click="handleNodeClick"
                 >
           <span slot-scope="{ node, data }">
@@ -127,7 +127,7 @@
 
                 permissionDrawerFlag: false,
                 tableList: [],
-                permissionKeys:[],
+                permissionKeys: [],
 
                 menuDrawerFlag: false,
                 treeList: [],
@@ -177,8 +177,11 @@
                 })
             },
             openRolePermissionRelation(scope) {
-                let parameter = {}
+                let parameter = {
+                    roleCode: [scope.row.code]
+                }
                 queryListPermission(parameter).then((res) => {
+
                     this.permissionDrawerFlag = true
 
                 })
@@ -218,21 +221,32 @@
             handleNodeClick(data) {
                 console.log(data)
             },
-
+            init() {
+                this.queryPageRole();
+                let parameter = {}
+                queryListMenu(parameter).then((res) => {
+                    let parent = {
+                        id: '0',
+                        path: '/',
+                        name: 'container',
+                        component: '/layout/container',
+                        children: []
+                    }
+                    parent = createTree(res, parent);
+                    this.treeList = parent.children
+                })
+                queryListPermission(parameter).then((res) => {
+                    this.tableList = res
+                })
+            }
 
         },
         created() {
 
         },
         mounted() {
-            this.queryPageRole();
-            let parameter = {}
-            queryListMenu(parameter).then((res) => {
-                this.treeList = createTree(res)
-            })
-            queryListPermission(parameter).then((res) => {
-                this.tableList = res
-            })
+            this.init();
+
         },
 
     };

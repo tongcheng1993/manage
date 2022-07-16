@@ -4,7 +4,7 @@
         <el-row>
             <el-col :span="12">
                 <div></div>
-                <div class="helf">
+                <div class="tree_left">
                     <el-tree :data="areaTree" :props="defaultProps" @node-click="handleNodeClick ">
 
                     </el-tree>
@@ -115,9 +115,13 @@
                 let parameter = this.areaQo
                 queryListArea(parameter).then((res) => {
                     let parent = {
-                        "id": "0"
+                        id: '0',
+                        path: '/',
+                        name: '世界',
+                        component: '/layout/container',
+                        children: []
                     }
-                    this.areaTree = createTree(res, parent)
+                    this.areaTree = createTree(res, parent).children
                 })
             },
 
@@ -135,7 +139,7 @@
 </script>
 
 <style scoped>
-    .helf {
+    .tree_left {
         width: 50%;
         height: 500px;
     }

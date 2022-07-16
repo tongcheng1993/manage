@@ -9,16 +9,26 @@ export const createTree = (arrayList, parent) => {
 const buildTree = (arrayList, parent) => {
     for (let i = 0; i < arrayList.length; i++) {
         let treeVo = arrayList[i]
+
         if (treeVo.parentId === parent.id) {
-            if (parent.path === '/') {
-                treeVo.path = parent.path + treeVo.path
-            } else {
-                treeVo.path = parent.path + '/' + treeVo.path
+            if (treeVo.path) {
+                if (parent.path === '/') {
+                    treeVo.path = parent.path + treeVo.path
+                } else {
+                    treeVo.path = parent.path + '/' + treeVo.path
+                }
             }
+
+
             treeVo = buildTree(arrayList, treeVo)
-            if(treeVo.children){
+            if (parent.children) {
 
             }else{
+                parent.children = []
+            }
+            if (treeVo.children) {
+
+            } else {
                 treeVo.children = []
             }
             if (parent.children) {
