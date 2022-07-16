@@ -11,7 +11,7 @@ const buildTree = (arrayList, parent) => {
         let treeVo = arrayList[i]
 
         if (treeVo.parentId === parent.id) {
-            if (treeVo.path) {
+            if (treeVo.path && parent.path) {
                 if (parent.path === '/') {
                     treeVo.path = parent.path + treeVo.path
                 } else {

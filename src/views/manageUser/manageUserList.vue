@@ -54,6 +54,11 @@
             >
             </el-pagination>
         </div>
+        <div>
+            <el-dialog :visible.sync="dialog_1">
+
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -84,6 +89,7 @@
                 dataDetailTitle: "",
                 dataDetailFormTop: "right",
                 dataDetail: {},
+                dialog_1:false,
             };
         },
         // 其他数据改变影响目标数据
