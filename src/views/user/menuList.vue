@@ -132,10 +132,16 @@
             },
             queryTreeMenu() {
                 let parameter = this.queryMenuMo;
-
                 queryListMenu(parameter)
                     .then((res) => {
-                        this.menuTree = createTree(res);
+                        let parent = {
+                            id: '0',
+                            path: '/',
+                            name: 'container',
+                            component: '/layout/container',
+                            children: []
+                        }
+                        this.menuTree = createTree(res,parent).children;
                     })
                     .catch();
             },
