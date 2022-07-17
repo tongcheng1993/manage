@@ -5,16 +5,22 @@ export const queryPageUser = (parameter) => {
     let url = '/api/sys/manageUser/queryPageUser';
     return postJson(url, parameter);
 }
-
+export const saveUser = (parameter) => {
+    let url = '/api/sys/manageUser/saveUser';
+    return postJson(url, parameter);
+}
 export const queryPageRole = (parameter) => {
     let url = '/api/sys/manageUser/queryPageRole';
+    return postJson(url, parameter);
+}
+export const queryListRole = (parameter) => {
+    let url = '/api/sys/manageUser/queryListRole';
     return postJson(url, parameter);
 }
 export const saveMenu = (parameter) => {
     let url = '/api/sys/manageUser/saveMenu';
     return postJson(url, parameter);
 }
-
 export const queryPagePermission = (parameter) => {
     let url = '/api/sys/manageUser/queryPagePermission';
     return postJson(url, parameter);

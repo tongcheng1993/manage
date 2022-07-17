@@ -196,10 +196,12 @@
                     roleCode: [scope.row.code]
                 }
                 queryListMenu(parameter).then((res) => {
-                    this.menuDrawerFlag = true
+
+                    this.menuKeys = [];
                     for (let i = 0; i < res.length; i++) {
                         this.menuKeys.push(res[i].id.toString());
                     }
+                    this.menuDrawerFlag = true
                 })
             },
             saveRoleMenuRelation() {
