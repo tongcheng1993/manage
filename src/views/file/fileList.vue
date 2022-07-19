@@ -31,9 +31,9 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-dropdown>
-              <span class="el-dropdown-link">
-                更多<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
+                          <span class="el-dropdown-link">
+                            更多<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="downloadFile(scope)"
                                 >下载

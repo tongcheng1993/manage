@@ -9,6 +9,10 @@ export const saveUser = (parameter) => {
     let url = '/api/sys/manageUser/saveUser';
     return postJson(url, parameter);
 }
+export const resetPassWord = (parameter) => {
+    let url = '/api/sys/manageUser/resetPassWord';
+    return postJson(url, parameter);
+}
 export const queryPageRole = (parameter) => {
     let url = '/api/sys/manageUser/queryPageRole';
     return postJson(url, parameter);

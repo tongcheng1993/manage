@@ -162,11 +162,13 @@
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
-                this.page.size = val;
+                this.dataQo.size = val;
+                this.queryPageRole()
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
-                this.page.current = val;
+                this.dataQo.current = val;
+                this.queryPageRole()
             },
             queryPageRole() {
                 let parameter = this.dataQo
