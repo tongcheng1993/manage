@@ -15,7 +15,8 @@
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="editRole(scope)">编辑</el-dropdown-item>
-                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法</el-dropdown-item>
+                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法
+                                </el-dropdown-item>
                                 <el-dropdown-item @click.native="openRoleMenuRelation(scope)">授予页面路由</el-dropdown-item>
 
                                 <el-dropdown-item @click.native="">删除</el-dropdown-item>
@@ -62,6 +63,7 @@
                             width="150">
                     </el-table-column>
                 </el-table>
+                <el-button @click="saveRolePermissionRelation()">保存</el-button>
             </el-drawer>
         </div>
         <div>
@@ -137,6 +139,10 @@
                     children: "children",
                     label: "name",
                 },
+                saveRolePermissionRelationMo: {
+                    roleId: "",
+                    permissionIdList: []
+                }
             };
         },
         // 其他数据改变影响目标数据
@@ -179,18 +185,30 @@
                 })
             },
             openRolePermissionRelation(scope) {
+                this.saveRolePermissionRelationMo.roleId = scope.row.id
                 let parameter = {
                     roleCode: [scope.row.code]
                 }
                 queryListPermission(parameter).then((res) => {
-
+                    if(res){
+                        for(let i = 0;i<res.length;i++){
+                            this.saveRolePermissionRelationMo.permissionIdList.push(res[i].id)
+                        }
+                    }
                     this.permissionDrawerFlag = true
 
                 })
 
             },
             saveRolePermissionRelation() {
+                let parameter = this.saveRolePermissionRelationMo
+                saveRolePermissionRelation(parameter).then((res) => {
+                    if (res) {
+                        this.permissionDrawerFlag = false
+                    }
+                }).catch((error) => {
 
+                })
             },
             openRoleMenuRelation(scope) {
                 this.roleId = scope.row.id
