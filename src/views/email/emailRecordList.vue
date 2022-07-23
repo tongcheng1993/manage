@@ -59,6 +59,7 @@
                                     class="upload-demo"
                                     action="/api/sys/file/uploadFile"
                                     :headers="uploadHeader"
+                                    :on-change="handleChange"
                                     :on-preview="handlePreview"
                                     :on-remove="handleRemove"
                                     :on-success="handleSuccess"
@@ -77,8 +78,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <el-button>关闭</el-button>
                             <el-button @click="sendEmail()">发送</el-button>
+                            <el-button @click="closeDialog_1()">关闭</el-button>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -144,12 +145,19 @@
         },
 
         methods: {
+            handleChange(file, fileList) {
+                console.log(fileList)
+                this.fileList = fileList.slice(-3);
+            },
             handlePreview(file) {
                 console.log(file);
                 console.log('handlePreview');
             },
             handleSuccess(response, file, fileList) {
-
+                console.log(response.result)
+                file.id = response.result
+                console.log(file)
+                console.log(fileList)
             },
             handleRemove(file, fileList) {
                 console.log(file, fileList);
@@ -195,17 +203,31 @@
                 }).catch()
             },
             openDialog1() {
+                this.sendEmailForm={}
                 this.dialog_1 = true;
             },
             sendEmail() {
+                console.log(this.fileList)
+                if (this.fileList) {
+                    this.sendEmailForm.fileIdList = []
+                    this.fileList.forEach((val) => {
+                        this.sendEmailForm.fileIdList.push(val.id)
+                    })
+                }
                 let parameter = this.sendEmailForm;
                 sendEmail(parameter).then((res) => {
-                    this.sendEmailForm = {};
-                    this.dialog_1 = false;
-                    this.queryPageData();
+                    if (res) {
+                        this.sendEmailForm = {};
+                        this.dialog_1 = false;
+                        this.queryPageData();
+                    }
                 }).catch()
             },
+            closeDialog_1(){
+                this.dialog_1 = false
+            }
         },
+
         mounted() {
             this.init();
         },

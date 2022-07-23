@@ -13,7 +13,11 @@ axios.interceptors.request.use(config => {
     }
 );
 axios.interceptors.response.use(response => {
-    if (response.data.code === 200) {
+    if(response.data.status === 500){
+        console.log(response.data.message)
+        alert("网络问题");
+        return Promise.reject(response.data.message)
+    }else if (response.data.code === 200) {
         if (response.data.success) {
             return response.data.result;
         } else {

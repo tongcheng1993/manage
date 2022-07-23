@@ -74,7 +74,7 @@
                     </el-form-item>
                     <el-form-item label="操作">
                         <el-button-group>
-                            <el-button @click="addPermission()">
+                            <el-button @click="savePermission()">
                                 新增
                             </el-button>
                             <el-button>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    import {queryPagePermission,addPermission,editPermission,removePermission,getPermission} from '../../api/manageUserApi'
+    import {queryPagePermission,savePermission,editPermission,removePermission,getPermission} from '../../api/manageUserApi'
 
     export default {
         name: "managePermissionList",
@@ -173,9 +173,9 @@
 
                 })
             },
-            addPermission(){
+            savePermission(){
                 let parameter = this.dataDetail;
-                addPermission(parameter).then((res) => {
+                savePermission(parameter).then((res) => {
                     if(res&&res>0){
                         this.dataDetail = {}
                         this.queryPageData()

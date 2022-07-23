@@ -15,10 +15,8 @@
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="editRole(scope)">编辑</el-dropdown-item>
-                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法
-                                </el-dropdown-item>
                                 <el-dropdown-item @click.native="openRoleMenuRelation(scope)">授予页面路由</el-dropdown-item>
-
+                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法</el-dropdown-item>
                                 <el-dropdown-item @click.native="">删除</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -39,7 +37,7 @@
         </div>
         <div>
             <el-drawer :visible.sync="permissionDrawerFlag" direction="rtl" :title="drawerTitle">
-                <el-table :data="tableList" max-height="250">
+                <el-table ref="permissionListTable" :data="tableList" @selection-change="selectChangeHandle" max-height="250">
                     <el-table-column
                             type="selection"
                             width="55">
@@ -185,22 +183,40 @@
                 })
             },
             openRolePermissionRelation(scope) {
+                this.permissionDrawerFlag = true
+                if(this.$refs.permissionListTable){
+                    this.$refs.permissionListTable.clearSelection();
+                }
                 this.saveRolePermissionRelationMo.roleId = scope.row.id
                 let parameter = {
                     roleCode: [scope.row.code]
                 }
                 queryListPermission(parameter).then((res) => {
-                    if(res){
-                        for(let i = 0;i<res.length;i++){
-                            this.saveRolePermissionRelationMo.permissionIdList.push(res[i].id)
-                        }
-                    }
-                    this.permissionDrawerFlag = true
+                    this.permissionKeys = res
+                    this.permissionKeys.forEach((val) => {
+                        this.tableList.forEach((item) => {
+                            if (val.id === item.id) {
+                                this.$refs.permissionListTable.toggleRowSelection(item, true)
+                            }
+                        })
+                    })
+
 
                 })
-
+            },
+            selectChangeHandle(val) {
+                console.log(val)
+                this.permissionKeys = val
             },
             saveRolePermissionRelation() {
+                this.saveRolePermissionRelationMo.permissionIdList = []
+                if(this.permissionKeys){
+                    this.permissionKeys.forEach((val)=>{
+                        this.saveRolePermissionRelationMo.permissionIdList.push(val.id)
+                    })
+                }
+
+
                 let parameter = this.saveRolePermissionRelationMo
                 saveRolePermissionRelation(parameter).then((res) => {
                     if (res) {
@@ -211,12 +227,17 @@
                 })
             },
             openRoleMenuRelation(scope) {
+                if(this.menuKeys){
+                    this.menuKeys = []
+                }
+                if(this.$refs.tree){
+                    this.$refs.tree.setCheckedKeys([])
+                }
                 this.roleId = scope.row.id
                 let parameter = {
                     roleCode: [scope.row.code]
                 }
                 queryListMenu(parameter).then((res) => {
-
                     this.menuKeys = [];
                     for (let i = 0; i < res.length; i++) {
                         this.menuKeys.push(res[i].id.toString());

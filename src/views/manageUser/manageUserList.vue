@@ -71,19 +71,16 @@
                     <el-form-item label="账号">
                         <el-input v-model="dataDetail.userName"></el-input>
                     </el-form-item>
-                    <el-form-item label="昵称">
-                        <el-input v-model="dataDetail.name"></el-input>
-                    </el-form-item>
                     <el-form-item label="密码">
                         <el-input v-model="dataDetail.passWord"></el-input>
+                    </el-form-item>
+                    <el-form-item label="昵称">
+                        <el-input v-model="dataDetail.name"></el-input>
                     </el-form-item>
                     <el-form-item label="操作">
                         <el-button-group>
                             <el-button @click="saveUser()">
-                                新增
-                            </el-button>
-                            <el-button>
-                                修改
+                                保存
                             </el-button>
                             <el-button>
                                 返回
@@ -114,17 +111,20 @@
         </div>
         <div>
             <el-dialog :visible.sync="dialog_1">
-                <el-table :data="roleList">
-                    <el-table-column type="selection"></el-table-column>
+                <el-table ref="roleListTable" :data="roleList" @selection-change="selectChangeHandle">
+                    <el-table-column type="selection" prop="id"></el-table-column>
                     <el-table-column prop="name" label="名称"></el-table-column>
                 </el-table>
+                <el-button @click="saveUserRoleRelation">
+                    保存
+                </el-button>
             </el-dialog>
         </div>
     </div>
 </template>
 
 <script>
-    import {queryPageUser, saveUser, resetPassWord, queryListRole} from '../../api/manageUserApi'
+    import {queryPageUser, saveUser, resetPassWord, queryListRole, saveUserRoleRelation} from '../../api/manageUserApi'
 
     export default {
         // 上级传递数据
@@ -161,6 +161,10 @@
                 dialog_1: false,
                 roleList: [],
                 scopeRoleList: [],
+                saveUserRoleRelationMo: {
+                    userId: "",
+                    roleIdList: []
+                }
             };
         },
         // 其他数据改变影响目标数据
@@ -169,9 +173,7 @@
         watch: {
             page: {
                 handler(newValue, oldValue) {
-                    this.dataQo.current = newValue.current
-                    this.dataQo.size = newValue.size
-                    this.dataQo.orders = newValue.orders
+
                 },
                 deep: true
             }
@@ -210,18 +212,51 @@
 
                 }).catch()
             },
-            queryScopeRoleList(scope) {
+            openRoleListTable(scope) {
+                this.dialog_1 = true
+                if (this.$refs.roleListTable) {
+                    this.$refs.roleListTable.clearSelection()
+                }
+
+                this.saveUserRoleRelationMo.userId = scope.row.id
                 let parameter = {
                     userId: [scope.row.id]
                 }
                 queryListRole(parameter).then((res) => {
                     this.scopeRoleList = res
+                    this.$nextTick(() => {
+                        this.scopeRoleList.forEach((val) => {
+                            this.roleList.forEach((item) => {
+                                if (val.id === item.id) {
+                                    this.$refs.roleListTable.toggleRowSelection(item, true)
+                                }
+                            })
+                        })
+                    })
                 }).catch()
-            },
-            openRoleListTable(scope) {
 
-                this.queryScopeRoleList(scope);
-                this.dialog_1 = true
+            },
+            selectChangeHandle(val) {
+                console.log(val)
+                this.scopeRoleList = val
+            },
+            saveUserRoleRelation() {
+                this.saveUserRoleRelationMo.roleIdList = []
+                if (this.scopeRoleList) {
+                    this.scopeRoleList.forEach((item) => {
+                        this.saveUserRoleRelationMo.roleIdList.push(item.id)
+                    })
+                }
+                let parameter = this.saveUserRoleRelationMo
+                saveUserRoleRelation(parameter)
+                    .then((res) => {
+                        if (res) {
+                            this.dialog_1 = false
+                        }
+                    })
+                    .catch((error) => {
+
+                    })
             },
             openAddUserDataDetail() {
                 this.dataDetail = {}
@@ -235,7 +270,7 @@
                 this.resetPassWordMo.id = scope.row.id
                 this.dialog_0 = true
             },
-            resetPassWord(){
+            resetPassWord() {
                 let parameter = this.resetPassWordMo
                 resetPassWord(parameter).then((res) => {
                     if (res && res.id) {
@@ -245,6 +280,7 @@
             },
             saveUser() {
                 let parameter = this.dataDetail
+
                 saveUser(parameter).then((res) => {
                     if (res && res.id) {
                         this.queryPageUser();
