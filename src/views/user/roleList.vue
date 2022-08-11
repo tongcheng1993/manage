@@ -203,7 +203,16 @@ export default {
       let parameter = {};
       queryListMenu(parameter)
         .then((res) => {
-          this.menuTree = createTree(res);
+          let parent = {
+            id: '0',
+            path: '/',
+            name: 'container',
+            component: '/layout/container',
+            children: []
+          }
+
+
+          this.menuTree = createTree(res, parent).children;
         })
         .catch((error) => {
           console.log(error);
@@ -211,7 +220,7 @@ export default {
     },
     openRoleMenuRelation(scope) {
       let parameter = {
-        roleId: [scope.row.id,]
+        roleIds: [scope.row.id,]
       };
       queryListMenu(parameter)
         .then((res) => {

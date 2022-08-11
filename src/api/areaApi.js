@@ -1,4 +1,4 @@
-import {get, postJson} from '../axios'
+import { postJson} from '../axios'
 
 
 
@@ -7,10 +7,6 @@ export const saveArea = (params) => {
     let url = "/api/sys/area/saveArea";
     return postJson(url, parameter);
 };
-
-
-
-
 
 export const queryPageArea = (params) => {
     let parameter = params;

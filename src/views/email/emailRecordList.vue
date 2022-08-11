@@ -2,29 +2,25 @@
     <div class="view_div">
         <div>
             <el-form>
-                <el-row>
-                    <el-col>
-                        收件人：
-                        <el-input v-model="dataQo.addrTo"></el-input>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col>
-                        <el-button>查询</el-button>
-                        <el-button @click="queryPageData()">重置</el-button>
-                    </el-col>
-                </el-row>
+                <el-form-item label=" 收件人：">
+                    <el-input v-model="dataQo.addrTo"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="queryPageData()">查询</el-button>
+                    <el-button>重置</el-button>
+                </el-form-item>
             </el-form>
         </div>
         <div>
             <el-button @click="openDialog1()">发送邮件</el-button>
         </div>
         <div>
-            <el-table :data="page.records">
+            <el-table :data="page.records" border>
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="addrTo" label="收件人"></el-table-column>
-                <el-table-column prop="subject" label="标题"></el-table-column>
-                <el-table-column prop="content" label="邮件内容"></el-table-column>
+                <el-table-column prop="addrTo" label="收件人" width="180" align="center"></el-table-column>
+                <el-table-column prop="subject" label="标题" width="180" align="center"></el-table-column>
+                <el-table-column prop="sendStatus" label="发送状态" width="180" align="center"></el-table-column>
+                <el-table-column prop="sendTime" label="发送时间" width="180" align="center"></el-table-column>
             </el-table>
             <el-pagination
                     layout="total, sizes, prev, pager, next, jumper"
@@ -173,12 +169,10 @@
                 );
             },
             handleSizeChange(val) {
-                console.log(`每页  条`);
                 this.dataQo.size = val;
                 this.queryPageData()
             },
             handleCurrentChange(val) {
-                console.log(`当前页: `);
                 this.dataQo.current = val;
                 this.queryPageData()
             },
@@ -203,7 +197,7 @@
                 }).catch()
             },
             openDialog1() {
-                this.sendEmailForm={}
+                this.sendEmailForm = {}
                 this.dialog_1 = true;
             },
             sendEmail() {
@@ -223,7 +217,7 @@
                     }
                 }).catch()
             },
-            closeDialog_1(){
+            closeDialog_1() {
                 this.dialog_1 = false
             }
         },

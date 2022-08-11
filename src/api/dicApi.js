@@ -1,4 +1,4 @@
-import {get, postJson} from '../axios'
+import {postForm, postJson} from '../axios'
 
 
 // 保存数据字典类别项
@@ -11,7 +11,7 @@ export const saveDic = (params) => {
 export const delDic = (params) => {
     let parameter = params;
     let url = "/api/sys/dic/delDic";
-    return get(url, parameter);
+    return postForm(url, parameter);
 };
 
 

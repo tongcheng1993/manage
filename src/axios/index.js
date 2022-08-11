@@ -39,8 +39,6 @@ axios.interceptors.response.use(response => {
     console.log(error);
     return Promise.reject(error)
 });
-
-
 export const get = (url, parameter) => {
     let token = store.state.token;
     if (token) {
@@ -56,6 +54,27 @@ export const get = (url, parameter) => {
         return axios({
             url: url,
             method: 'get',
+            params: parameter,
+            headers: {}
+        })
+    }
+};
+
+export const postForm = (url, parameter) => {
+    let token = store.state.token;
+    if (token) {
+        return axios({
+            url: url,
+            method: 'post',
+            params: parameter,
+            headers: {
+                'Tc-Token': token
+            }
+        })
+    } else {
+        return axios({
+            url: url,
+            method: 'post',
             params: parameter,
             headers: {}
         })

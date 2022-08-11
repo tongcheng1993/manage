@@ -8,7 +8,7 @@ module.exports = {
             'axios': 'axios',
             'element-ui':'ELEMENT',
             'nprogress': 'NProgress',
-            'wangeditor': 'wangeditor',
+            'wangeditor': 'wangEditor',
             'echarts': 'echarts',
         },
     },

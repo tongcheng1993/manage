@@ -217,7 +217,6 @@
                 if (this.$refs.roleListTable) {
                     this.$refs.roleListTable.clearSelection()
                 }
-
                 this.saveUserRoleRelationMo.userId = scope.row.id
                 let parameter = {
                     userId: [scope.row.id]

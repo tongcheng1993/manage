@@ -1,6 +1,27 @@
 <template>
     <div>
-
+        <div>
+            <el-button></el-button>
+        </div>
+        <div>
+            <el-button></el-button>
+        </div>
+        <div>
+            <el-table :data="page.records">
+                <el-table-column type="selection"></el-table-column>
+                <el-table-column prop="name" label="名称"></el-table-column>
+            </el-table>
+            <el-pagination
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="page.total"
+                    :page-size="page.size"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="page.current"
+                    :page-sizes="[10, 50, 100]"
+            >
+            </el-pagination>
+        </div>
     </div>
 </template>
 

@@ -1,39 +1,36 @@
 <template>
     <div class="view_div">
         <div class="login_div">
-            <el-form :model="loginForm" ref="form">
-                <el-form-item>
+            <el-form :model="loginForm" ref="form" label-width="120px">
+                <el-form-item label="用户名：">
                     <el-input
                             prefix-icon="el-icon-user"
                             v-model="loginForm.userName"
                             clearable
-                            placeholder=""
+                            placeholder="请输入用户名"
                     ></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item label="密码：">
                     <el-input
                             prefix-icon="el-icon-lock"
                             type="password"
                             v-model="loginForm.passWord"
                             clearable
-                            placeholder=""
+                            placeholder="请输入密码"
                             show-password
                     ></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-row>
-                        <el-col :span="12">
-                            <el-input v-model="loginForm.value" placeholder=""></el-input>
-                        </el-col>
-                        <el-col :span="12">
-                            <img
-                                    :onload="captchaImgLoad"
-                                    :src="captchaImg"
-                                    @click="getCaptchaImg"
-                                    alt="加载验证码失败"
-                            />
-                        </el-col>
-                    </el-row>
+                <el-form-item label="验证码：">
+                    <el-input prefix-icon="el-icon-picture" v-model="loginForm.value" placeholder="请输入验证码"></el-input>
+                </el-form-item>
+                <el-form-item label="验证码：">
+                    <img
+                            width="280px"
+                            :onload="captchaImgLoad"
+                            :src="captchaImg"
+                            @click="getCaptchaImg"
+                            alt="加载验证码失败"
+                    />
                 </el-form-item>
                 <el-form-item>
 
@@ -129,9 +126,7 @@
 
 <style scoped>
     .login_div {
-        background-color: #42b983;
         margin: 0 auto;
-        width: 450px;
-        height: 300px;
+        width: 400px;
     }
 </style>
