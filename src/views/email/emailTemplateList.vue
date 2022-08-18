@@ -6,7 +6,19 @@
         <div>
             <el-table :data="page.records" border>
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="name" label="模板名称"></el-table-column>
+                <el-table-column prop="name" label="邮件模板名称"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-dropdown>
+                            <el-button type="primary">
+                                更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item @click.native="openEditDataFlag(scope)">编辑</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </template>
+                </el-table-column>
             </el-table>
             <el-pagination
                     layout="total, sizes, prev, pager, next, jumper"
@@ -28,6 +40,11 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item>
+                        <el-input v-model="dataDetail.subject">
+
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item>
                         <el-input v-model="dataDetail.content" type="textarea">
 
                         </el-input>
@@ -44,7 +61,7 @@
 </template>
 
 <script>
-    import {saveEmailTemplate, queryPageEmailTemplate} from '../../api/emailApi.js'
+    import {getEmailTemplateById, saveEmailTemplate, queryPageEmailTemplate} from '../../api/emailApi.js'
 
     export default {
         name: "emailTemplateList",
@@ -116,6 +133,23 @@
             openDataDetailFlag() {
                 this.dataDetail = {}
                 this.dataDetailFlag = true;
+            },
+
+            openEditDataFlag(scope) {
+                console.log(scope)
+                let parameter = {
+                    id: scope.row.id
+                }
+                getEmailTemplateById(parameter)
+                    .then((res)=>{
+                        if(res){
+                            this.dataDetail = res
+                            this.dataDetailFlag = true;
+                        }
+                    })
+
+
+
             },
 
             saveEmailTemplate() {

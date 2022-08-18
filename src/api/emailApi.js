@@ -1,6 +1,12 @@
 import {get, postJson} from '../axios'
 
 
+export const getEmailTemplateById = (params) => {
+    let parameter = params;
+    let url = "/api/sys/email/getEmailTemplateById";
+    return get(url, parameter);
+}
+
 export const sendEmail = (params) => {
     let parameter = params;
     let url = "/api/sys/email/sendEmail";

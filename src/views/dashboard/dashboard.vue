@@ -1,18 +1,16 @@
 <template>
-    <div>
+    <div class="view_div">
         {{name}}
     </div>
 </template>
 
 <script>
-
-
     export default {
         name: "dashboard",
         components: {},
         props: {},
         methods: {
-             async toNextPage(to) {
+            async toNextPage(to) {
                 await this.$router.push({
                     path: to,
                     params: {}
@@ -21,7 +19,6 @@
             init() {
 
             },
-
         },
         computed: {},
         watch: {},

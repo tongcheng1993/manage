@@ -8,7 +8,7 @@
 
         </div>
         <div>
-            <el-button @click="save">
+            <el-button @click="saveHelpContent">
                 保存
             </el-button>
         </div>
@@ -16,14 +16,14 @@
 </template>
 
 <script>
-
-
+    import {getHelpContent,saveHelpContent} from '../../api/helpApi'
     export default {
         name: "help",
         components: {},
         props: {},
         methods: {
             init() {
+
                 let editor = new wangEditor(this.$refs.wEditor);
                 // 图片使用base64
                 editor.config.uploadImgShowBase64 = true
@@ -55,17 +55,32 @@
                     'redo',
                 ]
                 editor.config.onchange= (newHtml) => {
-
                     this.setContent(newHtml);
-
                 };
                 editor.create();
+                let parameter = {}
+                getHelpContent(parameter)
+                    .then((res)=>{
+                        if(res){
+                            this.html=res
+                            editor.txt.html(this.html)
+                        }
+                    })
+
             },
             setContent(newHtml){
                 this.html = newHtml
             },
-            save() {
+            saveHelpContent() {
+                let parameter = {
+                    content : this.html
+                }
+                saveHelpContent(parameter)
+                    .then((res)=>{
+                        if(res){
 
+                        }
+                    })
             },
         },
         computed: {},
@@ -81,17 +96,6 @@
                 },
                 editor: null,
                 html: "",
-                toolbarConfig: {
-                    // toolbarKeys: [ /* 显示哪些菜单，如何排序、分组 */ ],
-                    // excludeKeys: [ /* 隐藏哪些菜单 */ ],
-                },
-                editorConfig: {
-                    placeholder: "请输入内容...",
-                    // autoFocus: false,
-
-                    // 所有的菜单配置，都要在 MENU_CONF 属性下
-                    MENU_CONF: {},
-                },
             };
         },
         mounted() {
@@ -103,20 +107,5 @@
 </script>
 
 <style scoped>
-    .view_edit {
-        height: 400px;
-    }
 
-    #editor—wrapper {
-        border: 1px solid #ccc;
-        z-index: 100; /* 按需定义 */
-    }
-
-    #toolbar-container {
-        border-bottom: 1px solid #ccc;
-    }
-
-    #editor-container {
-        height: 500px;
-    }
 </style>

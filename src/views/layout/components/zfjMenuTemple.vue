@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="view_div">
         <template v-for="menu in menuList">
-            <div v-bind:key="menu" v-if="menu.showFlag && menu.showFlag > 0">
+            <template v-if="menu.showFlag && menu.showFlag > 0">
                 <el-submenu
                         :index="menu.path"
                         v-if="menu.children && menu.children.length > 0 && haveOneChildrenShow(menu.children)"
@@ -20,7 +20,7 @@
                     <i :class="menu.iconFlag"></i>
                     <span slot="title">{{ menu.name }}</span>
                 </el-menu-item>
-            </div>
+            </template>
         </template>
     </div>
 </template>
@@ -69,5 +69,8 @@
     };
 </script>
 
-<style scoped>
+<style >
+
+
+
 </style>

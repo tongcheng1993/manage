@@ -9,6 +9,7 @@ module.exports = {
             'element-ui':'ELEMENT',
             'nprogress': 'NProgress',
             'wangeditor': 'wangEditor',
+            'vue-baidu-map': 'BMap',
             'echarts': 'echarts',
         },
     },
