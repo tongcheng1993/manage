@@ -1,6 +1,36 @@
 <template>
     <div class="view_div">
-        {{name}}
+        <!--        列表内容-->
+        <div>
+            <el-table :data="page.records">
+                <el-table-column type="selection"></el-table-column>
+                <el-table-column prop="title" label="标题"></el-table-column>
+                <el-table-column prop="author" label="作者"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-dropdown>
+                            <el-button type="primary">
+                                更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item @click.native="">重置密码</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!--        分页组件-->
+            <el-pagination
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="page.total"
+                    :page-size="page.size"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="page.current"
+                    :page-sizes="[10, 50, 100]"
+            >
+            </el-pagination>
+        </div>
     </div>
 </template>
 

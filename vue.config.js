@@ -11,6 +11,7 @@ module.exports = {
             'wangeditor': 'wangEditor',
             'vue-baidu-map': 'BMap',
             'echarts': 'echarts',
+            // 'bpmn-js': 'BpmnModeler',
         },
     },
     devServer:{

@@ -12,42 +12,32 @@
             </el-col>
             <el-col :span="12">
                 <div>
-                    <el-button @click="openAddAreaDialog()">新增</el-button>
+                    <el-button @click="">新增</el-button>
                     <el-button>编辑</el-button>
                     <el-button>增加下级</el-button>
                 </div>
                 <div>
                     <el-form v-model="areaDetail">
-                        <el-row>
-                            <el-col :span="6">
-                                <el-form-item label="区域类型">
-                                    <el-select v-model="areaDetail.type" placeholder="请选择" clearable filterable>
-                                        <el-option
-                                                v-for="item in areaType"
-                                                :key="item.code"
-                                                :label="item.value"
-                                                :value="item.code"
-                                                :disabled="item.disabled">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="名称">
-                                    <el-input v-model="areaDetail.name"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="全称">
-                                    <el-input v-model="areaDetail.realName"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="编码">
-                                    <el-input v-model="areaDetail.code"></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
+                        <el-form-item label="区域类型">
+                            <el-select v-model="areaDetail.type" placeholder="请选择" clearable filterable>
+                                <el-option
+                                        v-for="item in areaType"
+                                        :key="item.code"
+                                        :label="item.value"
+                                        :value="item.code"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="名称">
+                            <el-input v-model="areaDetail.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="全称">
+                            <el-input v-model="areaDetail.realName"></el-input>
+                        </el-form-item>
+                        <el-form-item label="编码">
+                            <el-input v-model="areaDetail.code"></el-input>
+                        </el-form-item>
                     </el-form>
                 </div>
             </el-col>
@@ -70,7 +60,7 @@
         // 本页面计算属性
         computed: {
             areaType() {
-                return this.$store.state.dicStore.dic["area_type"]
+                return this.$store.getters['dicStore/getDic']['area_type']
             }
         },
         // 本页面监听属性
@@ -107,7 +97,6 @@
             },
             // 页面初始化数据
             init() {
-                this.$store.dispatch("dicStore/setDicItemList", {code: "area_type"})
                 this.queryTreeArea()
 
             },
@@ -116,9 +105,6 @@
                 queryListArea(parameter).then((res) => {
                     let parent = {
                         id: '0',
-                        path: '/',
-                        name: '世界',
-                        component: '/layout/container',
                         children: []
                     }
                     this.areaTree = createTree(res, parent).children

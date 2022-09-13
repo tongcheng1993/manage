@@ -23,7 +23,6 @@
         methods: {
             init() {
                 let tempMenu = this.$store.state.menu;
-                console.log(tempMenu)
                 this.menuList = tempMenu
             },
             handleOpen(key, keyPath) {

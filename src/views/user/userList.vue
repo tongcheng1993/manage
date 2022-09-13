@@ -30,7 +30,7 @@
         <div>
             <el-table :data="dataList">
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="userName" label="账号"></el-table-column>
+                <el-table-column prop="email" label="联系邮箱"></el-table-column>
                 <el-table-column prop="name" label="昵称"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -86,7 +86,7 @@
     import {queryPageUser} from '../../api/userApi'
 
     export default {
-        name: "demoList",
+        name: "userList",
         // 引用组件
         components: {},
         // 上级组件向本页面传递的参数
@@ -97,7 +97,7 @@
         watch: {},
         data() {
             return {
-                name: "demoList",
+                name: "userList",
                 page: {
                     total: 0,
                     current: 0,

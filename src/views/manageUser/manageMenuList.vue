@@ -25,60 +25,40 @@
                     <el-row>
                         <el-col>
                             <el-form :model="dataDetail" ref="dataDetailForm">
-                                <el-row>
-                                    <el-col :span="12">
-                                        <el-form-item label="上级id">
-                                            <el-input v-model="dataDetail.parentId"
-                                                      :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
-                                        <el-form-item label="自身id">
-                                            <el-input v-model="dataDetail.id" :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
-                                        <el-form-item label="排序">
-                                            <el-input v-model="dataDetail.sortNum"
-                                                      :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
-                                        <el-form-item label="名字">
-                                            <el-input v-model="dataDetail.name"
-                                                      :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
-                                        <el-form-item label="路径">
-                                            <el-input v-model="dataDetail.path"
-                                                      :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
-                                        <el-form-item label="组件地址">
-                                            <el-input v-model="dataDetail.component"
-                                                      :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
-                                        <el-form-item label="是否展示">
-                                            <el-input v-model="dataDetail.showFlag"
-                                                      :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
-                                        <el-form-item label="图标">
-                                            <el-input v-model="dataDetail.iconFlag"
-                                                      :disabled="dataDetailItemFlag"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <el-row>
-                                    <el-col>
-                                        <el-button @click="saveMenu()">保存</el-button>
-                                    </el-col>
-                                </el-row>
+                                <el-form-item label="上级id">
+                                    <el-input v-model="dataDetail.parentId"
+                                              :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="自身id">
+                                    <el-input v-model="dataDetail.id" :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="名字">
+                                    <el-input v-model="dataDetail.name"
+                                              :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="路径">
+                                    <el-input v-model="dataDetail.path"
+                                              :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="组件地址">
+                                    <el-input v-model="dataDetail.component"
+                                              :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="是否展示">
+                                    <el-input v-model="dataDetail.showFlag"
+                                              :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="图标">
+                                    <el-input v-model="dataDetail.iconFlag"
+                                              :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="排序">
+                                    <el-input v-model="dataDetail.sortNum"
+                                              :disabled="dataDetailItemFlag"></el-input>
+                                </el-form-item>
+                                <el-form-item label="操作">
+                                    <el-button @click="saveMenu()">保存</el-button>
+                                </el-form-item>
                             </el-form>
                         </el-col>
                     </el-row>

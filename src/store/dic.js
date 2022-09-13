@@ -1,36 +1,43 @@
-import {queryListDicItem} from '../api/dicApi'
+import {initDic} from '../api/dicApi'
+
+function isObjectEmpty(obj) {
+    for (let key in obj) {
+        return false
+    }
+    return true
+}
 
 export default {
     state: {
-        dic: {
-            area_type:[],
-
-        },
+        dic: {},
     },
     mutations: {
-        setDicItemList(state, data) {
-            state.dic[data.code]=data.list
-        }
+        initDic(state, data) {
+            state.dic = data
+        },
     },
     actions: {
-        setDicItemList(context,data){
-            if(context.state.dic[data.code] && context.state.dic[data.code].length > 0 ){
-
-            }else{
-                let parameter = {
-                    dicCode: data.code
-                }
-                queryListDicItem(parameter).then((res) => {
-                    let vo ={
-                        code: data.code,
-                        list :res
+        initDic(context, data) {
+            if (isObjectEmpty(context.state.dic)) {
+                let parameter = {}
+                initDic(parameter).then((res) => {
+                    if (res) {
+                        let tempDic = {}
+                        for (let i = 0; i < res.length; i++) {
+                            let tempOneDic = res[i]
+                            tempDic[tempOneDic.code] = tempOneDic.dicItemVoList
+                        }
+                        context.commit('initDic', tempDic)
                     }
-                    context.commit('setDicItemList',vo)
                 })
+            } else {
+
             }
-        }
+        },
     },
     getters: {
-
+        getDic(state) {
+            return state.dic;
+        }
     }
 }

@@ -4,7 +4,7 @@
 // import 'nprogress/nprogress.css'
 import store from '../store/index.js'
 import { getMenu } from '../api/loginApi'
-import { createTree } from '../util/treeUtil'
+import { createRouterTree } from '../util/treeUtil'
 
 Vue.use(VueRouter)
 
@@ -71,7 +71,6 @@ router.beforeEach((to, from, next) => {
             });
         } else {
             //登陆后用户单独路由是否加载完成
-            console.log(store.state.menu.length)
             if (store.state.menu.length === 0) {
                 getMenu({}).then((res) => {
                     let parent = {
@@ -81,7 +80,7 @@ router.beforeEach((to, from, next) => {
                         component: '/layout/container',
                         children: []
                     }
-                    parent = createTree(res, parent)
+                    parent = createRouterTree(res, parent)
                     let menu = []
                     menu.push(parent)
                     let aa = filterAsyncRouter(menu)
@@ -95,6 +94,7 @@ router.beforeEach((to, from, next) => {
                     next({ ...to, replace: true })
                 })
             } else {
+                store.dispatch("dicStore/initDic", {})
                 next();
             }
         }

@@ -1,104 +1,85 @@
 <template>
-    <div>
-        <el-row>
-            <el-col :span="12">
-                <!--        搜索-->
-                <div>
-                    <el-row>
-                        <el-col>
-                            <el-input v-model="queryMenuMo.roleName"></el-input>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col>
-                            <el-button @click="queryTreeMenu">查询</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div>
-                    <el-tree :data="menuTree" :props="defaultProps" @node-click="handleNodeClick">
+    <div class="view_div">
+        <div>
+            <el-row>
+                <el-col :span="12">
+                    <!--        搜索-->
+                    <div>
+                        <el-row>
+                            <el-col>
+                                <el-input v-model="queryMenuMo.roleName"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col>
+                                <el-button @click="queryTreeMenu">查询</el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+                    <div>
+                        <el-tree :data="menuTree" :props="defaultProps" @node-click="handleNodeClick">
                         <span slot-scope="{ node, data }">
                             <span>{{ node.label }}</span>
                             <span>{{ data.showFlag > 0 ? "" : "----隐藏" }}</span>
                         </span>
-                    </el-tree>
-                </div>
-            </el-col>
-            <el-col :span="12">
-                <el-row>
-                    <el-col>
+                        </el-tree>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <el-button-group>
                         <el-button @click="addTopMenu()">新增顶级路由</el-button>
                         <el-button @click="addNextMenu()">新增下级路由</el-button>
                         <el-button @click="editMenu()">编辑当前路由</el-button>
-                    </el-col>
-                </el-row>
-                <el-form :model="menuForm" label-width="100px">
-                    <el-row>
+                    </el-button-group>
+                    <el-form :model="menuForm" label-width="100px">
+                        <el-form-item label="上级路由编码">
+                            <el-input v-model="menuForm.parentId" autocomplete="off"
+                                      :disabled="dataDetailItemFlag"></el-input>
+                        </el-form-item>
+                        <el-form-item label="上级路由名称">
+                            <el-input
+                                    v-model="menuForm.parentName"
+                                    autocomplete="off"
+                                    :disabled="dataDetailItemFlag"
+                            ></el-input>
 
-                        <el-col :span="12">
-                            <el-form-item label="上级路由编码">
-                                <el-input v-model="menuForm.parentId" autocomplete="off"
-                                          :disabled="dataDetailItemFlag"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="上级路由名称">
-                                <el-input
-                                        v-model="menuForm.parentName"
-                                        autocomplete="off"
-                                        :disabled="dataDetailItemFlag"
-                                ></el-input>
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="名称">
-                                <el-input v-model="menuForm.name" autocomplete="off"
-                                          :disabled="dataDetailItemFlag"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="路由类型">
-                                <el-radio-group v-model="menuForm.showFlag">
-                                    <el-radio :label="0">隐藏菜单</el-radio>
-                                    <el-radio :label="1">路由菜单</el-radio>
-                                </el-radio-group>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="url路径">
-                                <el-input v-model="menuForm.path" autocomplete="off"
-                                          :disabled="dataDetailItemFlag"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="组件地址">
-                                <el-input
-                                        v-model="menuForm.component"
-                                        autocomplete="off"
-                                        :disabled="dataDetailItemFlag"
-                                ></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="页面图标">
-                                <el-input v-model="menuForm.iconFlag" autocomplete="off"
-                                          :disabled="dataDetailItemFlag"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="页面排序">
-                                <el-input v-model="menuForm.sortNum" autocomplete="off"
-                                          :disabled="dataDetailItemFlag"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
+                        </el-form-item>
+                        <el-form-item label="名称">
+                            <el-input v-model="menuForm.name" autocomplete="off"
+                                      :disabled="dataDetailItemFlag"></el-input>
+                        </el-form-item>
+                        <el-form-item label="路由类型">
+                            <el-radio-group v-model="menuForm.showFlag">
+                                <el-radio :label="0">隐藏菜单</el-radio>
+                                <el-radio :label="1">路由菜单</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item label="url路径">
+                            <el-input v-model="menuForm.path" autocomplete="off"
+                                      :disabled="dataDetailItemFlag"></el-input>
+                        </el-form-item>
+                        <el-form-item label="组件地址">
+                            <el-input
+                                    v-model="menuForm.component"
+                                    autocomplete="off"
+                                    :disabled="dataDetailItemFlag"
+                            ></el-input>
+                        </el-form-item>
+                        <el-form-item label="页面图标">
+                            <el-input v-model="menuForm.iconFlag" autocomplete="off"
+                                      :disabled="dataDetailItemFlag"></el-input>
+                        </el-form-item>
+                        <el-form-item label="页面排序">
+                            <el-input v-model="menuForm.sortNum" autocomplete="off"
+                                      :disabled="dataDetailItemFlag"></el-input>
+                        </el-form-item>
+                        <el-form-item label="操作">
                             <el-button @click="saveMenu()">保存</el-button>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </el-col>
-        </el-row>
+                        </el-form-item>
+                    </el-form>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -141,7 +122,7 @@
                             component: '/layout/container',
                             children: []
                         }
-                        this.menuTree = createTree(res,parent).children;
+                        this.menuTree = createTree(res, parent).children;
                     })
                     .catch();
             },

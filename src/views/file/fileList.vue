@@ -31,9 +31,9 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-dropdown>
-                          <span class="el-dropdown-link">
-                            更多<i class="el-icon-arrow-down el-icon--right"></i>
-                          </span>
+                            <el-button type="primary">
+                                更多<i class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="downloadFile(scope)"
                                 >下载
@@ -64,7 +64,7 @@
                 <el-upload
                         class="upload-demo"
                         action="/api/sys/file/uploadFile"
-                        :headers = "uploadHeader"
+                        :headers="uploadHeader"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :before-remove="beforeRemove"
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-    import {downloadFile, queryPageFile,delFile} from "../../api/fileApi";
+    import {downloadFile, queryPageFile, delFile} from "../../api/fileApi";
 
     export default {
         name: "fileList",
@@ -153,22 +153,22 @@
                     let file = new File([blob], "filename", {lastModified: Date.now()}); // blob转file
                 });
             },
-            delFile(scope){
+            delFile(scope) {
                 let parameter = {
                     id: scope.row.id,
                 };
-                delFile(parameter).then((res)=>{
-                    if(res){
+                delFile(parameter).then((res) => {
+                    if (res) {
                         this.queryPageFile();
                     }
-                }).catch((error)=>{
+                }).catch((error) => {
                     console.log(error)
                 })
             },
         },
         computed: {
-            uploadHeader(){
-                return {"Tc-Token":this.$store.state.token}
+            uploadHeader() {
+                return {"Tc-Token": this.$store.state.token}
             }
         },
         watch: {
@@ -195,7 +195,7 @@
                     orders: [],
                     fileName: "",
                 },
-                fileList:[],
+                fileList: [],
                 dialogFlag: false,
             };
         },

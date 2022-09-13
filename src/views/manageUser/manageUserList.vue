@@ -2,34 +2,25 @@
     <div class="view_div">
         <div>
             <el-form v-model="dataQo">
-                <el-row>
-                    <el-col :span="6">
-                        <el-input v-model="dataQo.userName"></el-input>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-input v-model="dataQo.name"></el-input>
-                    </el-col>
-                    <el-col :span="6">
-
-                    </el-col>
-                    <el-col :span="6">
-
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col>
-                        <el-button @click="queryPageUser">查询</el-button>
-                    </el-col>
-                </el-row>
+                <el-form-item>
+                    <el-input v-model="dataQo.userName"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-input v-model="dataQo.name"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button-group>
+                        <el-button @click="queryPageUser()">查询</el-button>
+                        <el-button @click="">重置</el-button>
+                    </el-button-group>
+                </el-form-item>
             </el-form>
         </div>
         <div>
-            <el-row>
-                <el-col>
-                    <el-button @click="openAddUserDataDetail()">新增</el-button>
-                    <el-button>注销</el-button>
-                </el-col>
-            </el-row>
+            <el-button-group>
+                <el-button @click="openAddUserDataDetail()">新增</el-button>
+                <el-button>注销</el-button>
+            </el-button-group>
         </div>
         <div>
             <el-table :data="page.records">
