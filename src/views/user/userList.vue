@@ -3,18 +3,8 @@
         <!--        条件查询-->
         <div>
             <el-form>
-                <el-row>
-                    <el-col :span="6"></el-col>
-                    <el-col :span="6"></el-col>
-                    <el-col :span="6"></el-col>
-                    <el-col :span="6"></el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6"></el-col>
-                    <el-col :span="6"></el-col>
-                    <el-col :span="6"></el-col>
-                    <el-col :span="6"></el-col>
-                </el-row>
+
+
             </el-form>
         </div>
         <!--        新增删除-->
@@ -30,8 +20,13 @@
         <div>
             <el-table :data="dataList">
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="email" label="联系邮箱"></el-table-column>
+                <el-table-column prop="userName" label="账户名"></el-table-column>
                 <el-table-column prop="name" label="昵称"></el-table-column>
+                <el-table-column prop="email" label="联系邮箱"></el-table-column>
+                <el-table-column prop="phone" label="电话"></el-table-column>
+                <el-table-column prop="type" label="类型">
+<!--                    //鼠标悬停提示-->
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-dropdown>
@@ -39,7 +34,9 @@
                                 更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item @click.native="">查看角色</el-dropdown-item>
                                 <el-dropdown-item @click.native="">重置密码</el-dropdown-item>
+                                <el-dropdown-item @click.native="">禁止登陆</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>

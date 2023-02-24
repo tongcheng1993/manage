@@ -1,4 +1,4 @@
-import {postForm, postJson} from '../axios'
+import {get,postForm, postJson} from '../axios'
 
 
 
@@ -11,7 +11,7 @@ export const downloadFile = (params) => {
 export const delFile = (params) => {
     let parameter = params;
     let url = "/api/sys/file/delFile";
-    return postForm(url, parameter);
+    return get(url, parameter);
 };
 
 export const queryPageFile = (params) => {

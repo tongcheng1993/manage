@@ -1,7 +1,7 @@
 import {initDic} from '../api/dicApi'
 
 function isObjectEmpty(obj) {
-    for (let key in obj) {
+    for(let p in obj){
         return false
     }
     return true
@@ -12,12 +12,14 @@ export default {
         dic: {},
     },
     mutations: {
-        initDic(state, data) {
+        mutationsInitDic(state, data) {
             state.dic = data
         },
     },
     actions: {
-        initDic(context, data) {
+        actionsInitDic(context, data) {
+            console.log("actionsInitDic")
+            console.log("true    " + isObjectEmpty(context.state.dic).toString())
             if (isObjectEmpty(context.state.dic)) {
                 let parameter = {}
                 initDic(parameter).then((res) => {
@@ -27,7 +29,7 @@ export default {
                             let tempOneDic = res[i]
                             tempDic[tempOneDic.code] = tempOneDic.dicItemVoList
                         }
-                        context.commit('initDic', tempDic)
+                        context.commit('mutationsInitDic', tempDic)
                     }
                 })
             } else {

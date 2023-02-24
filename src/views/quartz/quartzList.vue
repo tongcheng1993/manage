@@ -3,8 +3,7 @@
         <!--        新增删除-->
         <div>
             <el-button @click="openAddDialog()"> 新增</el-button>
-            <el-button> 删除</el-button>
-
+            <el-button @click="syncQuartzList()"> 同步quartz列表</el-button>
         </div>
         <!--        列表内容-->
         <div>
@@ -21,7 +20,10 @@
                                 更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item @click.native="">编辑</el-dropdown-item>
+                                <el-dropdown-item @click.native="openEditDialog(scope)">编辑</el-dropdown-item>
+                                <el-dropdown-item @click.native="">启动</el-dropdown-item>
+                                <el-dropdown-item @click.native="">停止</el-dropdown-item>
+                                <el-dropdown-item @click.native="">运行历史</el-dropdown-item>
                                 <el-dropdown-item @click.native="delQuartzRecord(scope)">删除</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -76,7 +78,7 @@
 </template>
 
 <script>
-    import {queryPageQuartzRecord, saveQuartzRecord,delQuartzRecord} from '../../api/quartzApi'
+    import {queryPageQuartzRecord, saveQuartzRecord, delQuartzRecord, syncQuartzList} from '../../api/quartzApi'
 
     export default {
         name: "quartzList",
@@ -167,6 +169,9 @@
                 this.dataDetailFlag = true;
             },
             openEditDialog(scope) {
+                this.dataDetailFlag = true;
+                console.log(scope.row)
+                this.dataDetail = scope.row
 
             },
             saveQuartzRecord() {
@@ -174,6 +179,8 @@
                 saveQuartzRecord(parameter).then((res) => {
                     if (res) {
                         this.queryPageData()
+                        this.dataDetail = {}
+                        this.dataDetailFlag = false;
                     }
                 })
             },
@@ -187,6 +194,14 @@
                     }
                 })
             },
+            syncQuartzList() {
+                let parameter = {}
+                syncQuartzList(parameter).then((res) => {
+                    if (res) {
+                        this.queryPageData()
+                    }
+                })
+            }
         },
         mounted() {
             this.init();

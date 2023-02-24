@@ -40,16 +40,9 @@
                 更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="editRole(scope)"
-                  >编辑</el-dropdown-item
-                >
-                <el-dropdown-item @click.native="openRoleMenuRelation(scope)"
-                  >授予页面路由</el-dropdown-item
-                >
-                <el-dropdown-item @click.native=""
-                  >授予后台方法</el-dropdown-item
-                >
-                <el-dropdown-item @click.native="">删除</el-dropdown-item>
+                <el-dropdown-item @click.native="editRole(scope)">编辑</el-dropdown-item>
+                <el-dropdown-item @click.native="openRoleMenuRelation(scope)">授予页面路由</el-dropdown-item>
+                <el-dropdown-item @click.native="">授予后台方法</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </template>

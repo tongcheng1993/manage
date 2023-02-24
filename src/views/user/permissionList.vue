@@ -1,5 +1,17 @@
 <template>
     <div class="view_div">
+        <!--        搜索-->
+        <div>
+
+        </div>
+        <!--        新增删除-->
+        <div>
+            <el-row>
+                <el-col :span="6">
+                    <el-button type="primary" @click="openSavePermissionForm()">新增</el-button>
+                </el-col>
+            </el-row>
+        </div>
         <!--        列表内容-->
         <div>
             <el-table :data="page.records">
@@ -30,10 +42,44 @@
             >
             </el-pagination>
         </div>
+        <!--        新增/修改/详情 -->
+        <div>
+            <el-dialog :visible.sync="permissionFormFlag" :title="formTitle">
+                <el-form :model="permissionForm">
+                    <el-form-item label="角色名称">
+                        <el-input v-model="permissionForm.name" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="唯一编码">
+                        <el-input v-model="permissionForm.codeSys" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="唯一编码">
+                        <el-input v-model="permissionForm.codeModule" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="唯一编码">
+                        <el-input v-model="permissionForm.code" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色描述">
+                        <el-input
+                                v-model="permissionForm.description"
+                                autocomplete="off"
+                        ></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="formFlag = false">取 消</el-button>
+                    <el-button type="primary" @click="savePermission()">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
 <script>
+
+    import {
+        savePermission
+    } from "../../api/userApi";
+
     export default {
         name: "permissionList",
         // 引用组件
@@ -50,6 +96,9 @@
                     orders: [],
                     records: [],
                 },
+                permissionFormFlag : false,
+                permissionForm: {},
+
             };
         },
         // 本页面计算属性
@@ -65,6 +114,15 @@
                     params: {},
                 }
                 await this.$router.push(parameter);
+            },
+            openSavePermissionForm() {
+                this.permissionFormFlag = true;
+            },
+            savePermission() {
+                let parameter = this.permissionForm
+                savePermission(parameter).then((res)=>{
+                    this.permissionFormFlag = false
+                }).catch()
             },
             // 初始化数据
             init() {

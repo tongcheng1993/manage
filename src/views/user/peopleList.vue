@@ -11,6 +11,7 @@
 
 <script>
     import "../../../node_modules/echarts/map/js/china";
+
     export default {
         name: "peopleList",
         // 引用组件

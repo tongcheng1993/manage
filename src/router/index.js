@@ -15,11 +15,6 @@ const routes = [
         component: () => import('@/views/login/login.vue'),
     },
     {
-        path: '/hehe',
-        name: 'hehe',
-        component: () => import('@/views/login/login.vue'),
-    },
-    {
         path: '/lost404',
         name: 'lost404',
         component: () => import('@/views/lost404/lost404.vue'),
@@ -63,6 +58,9 @@ function filterAsyncRouter(asyncRouterMap) {
 const whiteList = ['/login', '/lost404'];
 router.beforeEach((to, from, next) => {
     NProgress.start();
+    console.log("to"+to.path)
+    console.log("from"+from.path)
+    console.log("token"+store.state.token)
     if (store.state.token) {
         if (whiteList.indexOf(to.path) !== -1) {
             next({
@@ -94,7 +92,9 @@ router.beforeEach((to, from, next) => {
                     next({ ...to, replace: true })
                 })
             } else {
-                store.dispatch("dicStore/initDic", {})
+                console.log("111111")
+                store.dispatch("dicStore/actionsInitDic", {})
+                console.log("3333333")
                 next();
             }
         }
