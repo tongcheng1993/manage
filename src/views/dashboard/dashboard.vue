@@ -1,16 +1,16 @@
 <template>
     <div class="view_div">
         {{name}}
-        <zfjBpmn></zfjBpmn>
+
     </div>
 </template>
 
 <script>
-    import zfjBpmn from '../../components/zfjBpmn'
+
     export default {
         name: "dashboard",
         components: {
-            zfjBpmn
+
         },
         props: {},
         methods: {

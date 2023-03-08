@@ -35,7 +35,7 @@
             // 初始化数据
             async init() {
                 // 创建BpmnModeler
-                this.bpmnModeler = new BpmnModeler({
+                this.bpmnModeler = new BpmnJS({
                     container: this.$refs.canvas,
                     // 加入工具栏支持
                     propertiesPanel: {
@@ -43,7 +43,7 @@
                     },
                     additionalModules: [],
                     moddleExtensions: {
-                        bpmn: bpmnModdleDescriptor
+                        // bpmn: bpmnModdleDescriptor
                     }
                 });
                 let xmsStr = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -68,9 +68,11 @@
             async createNewDiagram(bpmn) {
 
                 // 将字符串转换成图显示出来;
-                this.bpmnModeler.importXML(bpmn, err => {
+                this.bpmnModeler.importXML(bpmn, (err,warning) => {
                     if (err) {
                         this.$message.error('打开模型出错,请确认该模型符合Bpmn2.0规范');
+                    }else   if(warning){
+                        this.$message.error('warning 打开模型出错,请确认该模型符合Bpmn2.0规范');
                     } else {
                         console.log("成功导入模型");
                     }
@@ -90,10 +92,6 @@
 <style scoped>
 
 
-    @import '~bpmn-js/dist/assets/diagram-js.css';
-    @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
-    @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
-    @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 
 
     .containers {

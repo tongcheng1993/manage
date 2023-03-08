@@ -58,9 +58,6 @@ function filterAsyncRouter(asyncRouterMap) {
 const whiteList = ['/login', '/lost404'];
 router.beforeEach((to, from, next) => {
     NProgress.start();
-    console.log("to"+to.path)
-    console.log("from"+from.path)
-    console.log("token"+store.state.token)
     if (store.state.token) {
         if (whiteList.indexOf(to.path) !== -1) {
             next({
@@ -76,6 +73,7 @@ router.beforeEach((to, from, next) => {
                         path: '/',
                         name: 'container',
                         component: '/layout/container',
+                        redirect: '/dashboard',
                         children: []
                     }
                     parent = createRouterTree(res, parent)
@@ -92,9 +90,8 @@ router.beforeEach((to, from, next) => {
                     next({ ...to, replace: true })
                 })
             } else {
-                console.log("111111")
-                store.dispatch("dicStore/actionsInitDic", {})
-                console.log("3333333")
+
+                // store.dispatch("dicStore/actionsInitDic", {})
                 next();
             }
         }
