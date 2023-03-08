@@ -91,7 +91,7 @@ router.beforeEach((to, from, next) => {
                 })
             } else {
 
-                // store.dispatch("dicStore/actionsInitDic", {})
+                store.dispatch("dicStore/actionsInitDic", {})
                 next();
             }
         }

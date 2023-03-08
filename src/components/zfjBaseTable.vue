@@ -2,9 +2,7 @@
     <div class="view_div">
         <div>
             <el-form>
-                <el-form-item label=" 收件人：">
-                    <el-input v-model="dataQo.addrTo"></el-input>
-                </el-form-item>
+
                 <el-form-item>
                     <el-button @click="queryPageData()">查询</el-button>
                     <el-button>重置</el-button>
@@ -32,14 +30,9 @@
 
 <script>
     export default {
-        name: "pageView",
-        // 引用组件
-        components: {},
-        // 上级组件向本页面传递的参数
-        props: {},
+        name: "zfjBaseTable",
         data() {
             return {
-                name: "pageView",
                 page: {
                     total: 0,
                     current: 0,
@@ -51,30 +44,10 @@
                     current: 0,
                     size: 10,
                     orders: [],
-                    addrTo: "",
                 },
-            };
-        },
-        // 本页面计算属性
-        computed: {},
-        // 本页面监听属性
-        watch: {},
-
-        methods: {
-
-            // 初始化数据
-            init() {
-
-            },
-
-        },
-        mounted() {
-            this.init();
-        },
-        beforeDestroy() {
-        },
-    };
-
+            }
+        }
+    }
 </script>
 
 <style scoped>

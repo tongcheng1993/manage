@@ -18,8 +18,6 @@ export default {
     },
     actions: {
         actionsInitDic(context, data) {
-            console.log("actionsInitDic")
-            console.log("true    " + isObjectEmpty(context.state.dic).toString())
             if (isObjectEmpty(context.state.dic)) {
                 let parameter = {}
                 initDic(parameter).then((res) => {

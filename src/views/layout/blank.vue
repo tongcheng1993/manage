@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view_div">
         <router-view/>
     </div>
 </template>
@@ -18,23 +18,9 @@
         data() {
             return {
                 name: "blank",
-                page: {
-                    total: 0,
-                    current: 0,
-                    size: 10,
-                    orders: [],
-                    records: [],
-                },
             };
         },
         methods: {
-            // 跳转页面
-            async toNextPage(to) {
-                await this.$router.push({
-                    path: to,
-                    params: {},
-                });
-            },
             // 页面初始化数据
             init() {
 

@@ -9,6 +9,7 @@
                     <zfj-aside-menu></zfj-aside-menu>
                 </el-aside>
                 <el-main>
+
                     <router-view></router-view>
                 </el-main>
             </el-container>
@@ -41,13 +42,6 @@
         data() {
             return {
                 name: 'container',
-                page: {
-                    total: 0,
-                    current: 0,
-                    size: 10,
-                    orders: []
-                },
-                mes: "vue"
             }
         },
         mounted() {

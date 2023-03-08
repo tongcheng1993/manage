@@ -2,9 +2,9 @@
     <div class="view_div">
         <el-menu
                 router
-                @open="handleOpen"
-                @close="handleClose"
-                @select="handleSelect">
+                @open="handleOpen()"
+                @close="handleClose()"
+                @select="handleSelect()">
             <zfj-menu-temple :menuList="menuList"></zfj-menu-temple>
         </el-menu>
     </div>
