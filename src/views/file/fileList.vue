@@ -56,7 +56,7 @@
 </template>
 
 <script>
-    import {downloadFile,downloadFileTrue, queryPageFile, delFile} from "../../api/fileApi";
+    import {downloadFileTrue, queryPageFile, delFile} from "../../api/fileApi";
 
     export default {
         name: "fileList",
