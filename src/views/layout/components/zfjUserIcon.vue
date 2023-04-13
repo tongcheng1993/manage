@@ -43,7 +43,7 @@
 
                         _that.sendWsMessage()
                     }, function connectErrCallback() {
-
+                        _that.wsFlag = "warning"
                     })
 
                 }

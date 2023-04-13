@@ -18,7 +18,6 @@
         </div>
         <!--        新增删除-->
         <div>
-            <el-button type="primary" @click="dialogFlag = true">新增</el-button>
             <el-button type="primary" @click="">批量删除</el-button>
         </div>
         <!--        列表内容-->
@@ -35,14 +34,8 @@
                                 更多<i class="el-icon-arrow-down el-icon--right"></i>
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item @click.native="downloadFile(scope)"
-                                >下载
-                                </el-dropdown-item
-                                >
-                                <el-dropdown-item @click.native="delFile(scope)"
-                                >删除
-                                </el-dropdown-item
-                                >
+                                <el-dropdown-item @click.native="downloadFileThis(scope)">下载</el-dropdown-item>
+                                <el-dropdown-item @click.native="delFile(scope)">删除</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>
@@ -59,32 +52,11 @@
             >
             </el-pagination>
         </div>
-        <div>
-            <el-dialog :visible.sync="dialogFlag">
-                <el-upload
-                        class="upload-demo"
-                        action="/api/sys/file/uploadFile"
-                        :headers="uploadHeader"
-                        :on-preview="handlePreview"
-                        :on-remove="handleRemove"
-                        :before-remove="beforeRemove"
-                        multiple
-                        :limit="3"
-                        :on-exceed="handleExceed"
-                        :file-list="fileList"
-                >
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">
-                        只能上传jpg/png文件，且不超过500kb
-                    </div>
-                </el-upload>
-            </el-dialog>
-        </div>
     </div>
 </template>
 
 <script>
-    import {downloadFile, queryPageFile, delFile} from "../../api/fileApi";
+    import {downloadFile,downloadFileTrue, queryPageFile, delFile} from "../../api/fileApi";
 
     export default {
         name: "fileList",
@@ -136,22 +108,8 @@
                         console.log(err);
                     });
             },
-            downloadFile(scope) {
-                let parameter = {
-                    id: scope.row.id,
-                };
-                downloadFile(parameter).then((res) => {
-                    // let blob = new Blob([res])
-                    // const files = new window.File([blob],this.files[0].name,{type:this.files[0].type})
-                    // let data = {
-                    //     name: "hanmeimei",
-                    //     age: 88
-                    // };
-                    // var content = JSON.stringify(data);
-                    var blob = new Blob([res], {type: "text/plain;charset=utf-8"}); // 把数据转化成blob对象
-                    console.log(blob, "blob");
-                    let file = new File([blob], "filename", {lastModified: Date.now()}); // blob转file
-                });
+            downloadFileThis(scope) {
+                downloadFileTrue(scope.row.id)
             },
             delFile(scope) {
                 let parameter = {
