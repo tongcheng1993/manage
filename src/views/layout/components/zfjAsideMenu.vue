@@ -5,7 +5,7 @@
                 @open="handleOpen()"
                 @close="handleClose()"
                 @select="handleSelect()">
-            <zfj-menu-temple :menuList="menuList"></zfj-menu-temple>
+            <zfj-menu-temple :menuList="menu"></zfj-menu-temple>
         </el-menu>
     </div>
 </template>
@@ -22,34 +22,38 @@
         props: {},
         methods: {
             init() {
-                let tempMenu = this.$store.state.menu;
-                this.menuList = tempMenu
+
             },
             handleOpen(key, keyPath) {
-                console.log(key)
-                console.log(keyPath)
+                console.log("handleOpen" + key)
+                console.log("handleOpen" + keyPath)
             },
             handleClose(key, keyPath) {
-                console.log(key)
-                console.log(keyPath)
+                console.log("handleClose" + key)
+                console.log("handleClose" + keyPath)
             },
             handleSelect(key, keyPath) {
-                console.log(key)
-                console.log(keyPath)
+                console.log("handleSelect" + key)
+                console.log("handleSelect" + keyPath)
             },
         },
-        computed: {},
-        watch: {},
+        computed: {
+            menu() {
+                return this.$store.state.menu;
+            }
+        },
+        watch: {
+            menu: {
+                handler(newValue, oldValue) {
+                    console.log('new', newValue)
+                    console.log('old', oldValue)
+                },
+                deep: true,
+            },
+        },
         data() {
             return {
                 name: 'asideMenu',
-                page: {
-                    total: 0,
-                    current: 0,
-                    size: 10,
-                    orders: []
-                },
-                menuList: [],
             }
         },
         mounted() {

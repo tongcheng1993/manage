@@ -1,16 +1,16 @@
 <template>
     <div class="view_div">
         <div>
-            <el-form v-model="dataQo">
-                <el-form-item>
-                    <el-input v-model="dataQo.userName"></el-input>
+            <el-form v-model="page" label-width="100px">
+                <el-form-item label="账号">
+                    <el-input v-model="page.userName"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-input v-model="dataQo.name"></el-input>
+                <el-form-item label="昵称">
+                    <el-input v-model="page.shortName"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button-group>
-                        <el-button @click="queryPageUser()">查询</el-button>
+                        <el-button @click="queryPageManageUser()">查询</el-button>
                         <el-button @click="">重置</el-button>
                     </el-button-group>
                 </el-form-item>
@@ -19,14 +19,13 @@
         <div>
             <el-button-group>
                 <el-button @click="openAddUserDataDetail()">新增</el-button>
-                <el-button>注销</el-button>
             </el-button-group>
         </div>
         <div>
-            <el-table :data="page.records">
+            <el-table :data="page.records" v-loading="tableLoading">
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="userName" label="账号"></el-table-column>
-                <el-table-column prop="name" label="昵称"></el-table-column>
+                <el-table-column prop="shortName" label="昵称"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -36,8 +35,6 @@
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="openUpdateUserDataDetail(scope)">编辑</el-dropdown-item>
-                                <el-dropdown-item @click.native="openResetPassWordDataDetail(scope)">重置密码
-                                </el-dropdown-item>
                                 <el-dropdown-item @click.native="openRoleListTable(scope)">授予角色</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -66,16 +63,12 @@
                         <el-input v-model="dataDetail.passWord"></el-input>
                     </el-form-item>
                     <el-form-item label="昵称">
-                        <el-input v-model="dataDetail.name"></el-input>
+                        <el-input v-model="dataDetail.shortName"></el-input>
                     </el-form-item>
                     <el-form-item label="操作">
                         <el-button-group>
-                            <el-button @click="saveUser()">
-                                保存
-                            </el-button>
-                            <el-button>
-                                返回
-                            </el-button>
+                            <el-button @click="addManageUser()">保存</el-button>
+                            <el-button>返回</el-button>
                         </el-button-group>
                     </el-form-item>
                 </el-form>
@@ -104,7 +97,9 @@
             <el-dialog :visible.sync="dialog_1">
                 <el-table ref="roleListTable" :data="roleList" @selection-change="selectChangeHandle">
                     <el-table-column type="selection" prop="id"></el-table-column>
-                    <el-table-column prop="name" label="名称"></el-table-column>
+                    <el-table-column prop="roleName" label="名称"></el-table-column>
+                    <el-table-column prop="roleCode" label="编码"></el-table-column>
+                    <el-table-column prop="roleDescription" label="描述"></el-table-column>
                 </el-table>
                 <el-button @click="saveUserRoleRelation">
                     保存
@@ -115,7 +110,13 @@
 </template>
 
 <script>
-    import {queryPageUser, saveUser, resetPassWord, queryListRole, saveUserRoleRelation} from '../../api/manageUserApi'
+    import {
+        queryPageManageUser,
+        addManageUser,
+        resetPassWord,
+        queryListManageRole,
+        saveUserRoleRelation
+    } from '../../api/manageUserApi'
 
     export default {
         // 上级传递数据
@@ -130,20 +131,20 @@
                     size: 10,
                     orders: [],
                     records: [],
-                },
-                dataQo: {
-                    current: 0,
-                    size: 10,
-                    orders: [],
                     userName: "",
+                    shortName: "",
                 },
+                tableLoading:false,
+
 
                 dataDetailFlag: false,
                 dataDetailTitle: "",
                 dataDetailFormTop: "right",
                 dataDetail: {
-                    name: "",
+                    userName: "",
                 },
+
+
                 dialog_0: false,
                 resetPassWordMo: {
                     id: "",
@@ -171,37 +172,38 @@
         },
         methods: {
             // 跳转页面
-            async toNextPage(to) {
+            async toNextPage(to, query) {
                 await this.$router.push({
                     path: to,
-                    params: {},
+                    query: query,
                 });
             },
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.dataQo.size = val;
-                this.queryPageUser();
+                this.page.size = val
+                this.queryPageManageUser();
             },
             handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.dataQo.current = val;
-                this.queryPageUser();
+                this.page.current = val
+                this.queryPageManageUser();
             },
-            queryPageUser() {
-                let parameter = this.dataQo
-                queryPageUser(parameter).then((res) => {
+            queryPageManageUser() {
+                this.tableLoading = true
+                let parameter = this.page
+                queryPageManageUser(parameter).then((res) => {
                     this.page = res
+                    this.tableLoading = false
                 }).catch((err) => {
-
+                    console.log(err)
+                    this.tableLoading = false
                 })
             },
-            queryListRole() {
+            queryListManageRole() {
                 let parameter = {}
-                queryListRole(parameter).then((res) => {
+                queryListManageRole(parameter).then((res) => {
                     this.roleList = res
-
-
-                }).catch()
+                }).catch((err) => {
+                    console.log(err)
+                })
             },
             openRoleListTable(scope) {
                 this.dialog_1 = true
@@ -210,9 +212,9 @@
                 }
                 this.saveUserRoleRelationMo.userId = scope.row.id
                 let parameter = {
-                    userId: [scope.row.id]
+                    userId: scope.row.id
                 }
-                queryListRole(parameter).then((res) => {
+                queryListManageRole(parameter).then((res) => {
                     this.scopeRoleList = res
                     this.$nextTick(() => {
                         this.scopeRoleList.forEach((val) => {
@@ -268,19 +270,20 @@
                     }
                 }).catch()
             },
-            saveUser() {
+            addManageUser() {
                 let parameter = this.dataDetail
-
-                saveUser(parameter).then((res) => {
-                    if (res && res.id) {
-                        this.queryPageUser();
+                addManageUser(parameter).then((res) => {
+                    if (res) {
+                        this.queryPageManageUser();
                         this.dataDetailFlag = false
                     }
-                }).catch()
+                }).catch((err) => {
+                    console.log(err)
+                })
             },
             init() {
-                this.queryPageUser();
-                this.queryListRole();
+                this.queryPageManageUser();
+                this.queryListManageRole();
             },
 
 

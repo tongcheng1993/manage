@@ -1,13 +1,16 @@
 <template>
     <div id="app">
         <div id="view">
-            <transition name="el-fade-in-linear">
+
                 <router-view></router-view>
-            </transition>
+
         </div>
     </div>
 </template>
 
+<script>
+
+</script>
 <style scoped>
     #app {
         background-color: pink;

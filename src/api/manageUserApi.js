@@ -1,36 +1,41 @@
 import {get, postJson} from '../axios'
 
 
-export const queryPageUser = (parameter) => {
-    let url = '/api/sys/manageUser/manage/queryPageUser';
+export const queryPageManageUser = (parameter) => {
+    let url = '/api/sys/manageUser/queryPageManageUser';
     return postJson(url, parameter);
 }
-export const saveUser = (parameter) => {
-    let url = '/api/sys/manageUser/manage/saveUser';
+export const addManageUser = (parameter) => {
+    let url = '/api/sys/manageUser/addManageUser';
     return postJson(url, parameter);
 }
 export const resetPassWord = (parameter) => {
-    let url = '/api/sys/manageUser/manage/resetPassWord';
+    let url = '/api/sys/manageUser/resetPassWord';
     return postJson(url, parameter);
 }
-export const queryPageRole = (parameter) => {
-    let url = '/api/sys/manageUser/manage/queryPageRole';
+export const queryPageManageRole = (parameter) => {
+    let url = '/api/sys/manageUser/queryPageManageRole';
     return postJson(url, parameter);
 }
-export const queryListRole = (parameter) => {
-    let url = '/api/sys/manageUser/manage/queryListRole';
+export const queryListManageRole = (parameter) => {
+    let url = '/api/sys/manageUser/queryListManageRole';
     return postJson(url, parameter);
 }
 export const saveMenu = (parameter) => {
-    let url = '/api/sys/manageUser/manage/saveMenu';
+    let url = '/api/sys/manageUser/saveMenu';
     return postJson(url, parameter);
 }
-export const queryPagePermission = (parameter) => {
-    let url = '/api/sys/manageUser/manage/queryPagePermission';
+
+export const queryListManageMenu = (parameter) => {
+    let url = '/api/sys/manageUser/queryListManageMenu';
     return postJson(url, parameter);
 }
-export const queryListPermission = (parameter) => {
-    let url = '/api/sys/manageUser/manage/queryListPermission';
+export const queryPageManagePermission = (parameter) => {
+    let url = '/api/sys/manageUser/queryPageManagePermission';
+    return postJson(url, parameter);
+}
+export const queryListManagePermission = (parameter) => {
+    let url = '/api/sys/manageUser/queryListManagePermission';
     return postJson(url, parameter);
 }
 export const savePermission = (parameter) => {
@@ -48,10 +53,6 @@ export const removePermission = (parameter) => {
 export const getPermission = (parameter) => {
     let url = '/api/sys/manageUser/manage/getPermission';
     return get(url, parameter);
-}
-export const queryListMenu = (parameter) => {
-    let url = '/api/sys/manageUser/manage/queryListMenu';
-    return postJson(url, parameter);
 }
 export const saveUserRoleRelation = (parameter) => {
     let url = '/api/sys/manageUser/manage/saveUserRoleRelation';

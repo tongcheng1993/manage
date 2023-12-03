@@ -46,8 +46,8 @@ export const queryListDicItem = (params) => {
     return postJson(url, parameter);
 };
 
-export const initDic = (params) => {
+export const getAllDicDetail = (params) => {
     let parameter = params;
-    let url = "/api/sys/dic/initDic";
+    let url = "/api/sys/dic/getAllDicDetail";
     return postJson(url, parameter);
 };

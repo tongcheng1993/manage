@@ -26,6 +26,7 @@
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="fileName" label="文件名称"></el-table-column>
                 <el-table-column prop="fileByte" label="文件大小"></el-table-column>
+                <el-table-column prop="uploadPath" label="文件来源"></el-table-column>
                 <el-table-column prop="fileUrl" label="文件地址"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -109,7 +110,7 @@
                     });
             },
             downloadFileThis(scope) {
-                downloadFileTrue(scope.row.id)
+                downloadFileTrue(scope.row)
             },
             delFile(scope) {
                 let parameter = {

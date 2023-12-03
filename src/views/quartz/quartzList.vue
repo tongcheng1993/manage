@@ -119,7 +119,21 @@
         // 本页面计算属性
         computed: {
             startStopType() {
-                return this.$store.getters['dicStore/getDic']['start_stop_type']
+                // return this.$store.getters['dicStore/getDic']['start_stop_type']
+                return [
+                    {
+                        code:'start_stop_type_0',
+                        value:"未知"
+                     },
+                    {
+                        code:'start_stop_type_1',
+                        value:"开启"
+                    },
+                    {
+                        code:'start_stop_type_2',
+                        value:"停止"
+                    },
+                ]
             }
         },
         // 本页面监听属性

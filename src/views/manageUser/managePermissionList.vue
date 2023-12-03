@@ -26,7 +26,7 @@
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="codeSys" label="系统编码"></el-table-column>
                 <el-table-column prop="codeModule" label="模块编码"></el-table-column>
-                <el-table-column prop="code" label="权限编码"></el-table-column>
+                <el-table-column prop="codeMethod" label="方法编码"></el-table-column>
                 <el-table-column prop="description" label="描述"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    import {queryPagePermission,savePermission,editPermission,removePermission,getPermission} from '../../api/manageUserApi'
+    import {queryPageManagePermission} from '../../api/manageUserApi'
 
     export default {
         name: "managePermissionList",
@@ -162,7 +162,12 @@
             },
             // 初始化数据
             init() {
-                this.queryPageData()
+                let param = {}
+                queryPageManagePermission(param).then((res) => {
+                    this.page = res
+                }).catch((err) => {
+                    console.log(err)
+                })
             },
             // 查询数据
             queryPageData() {
@@ -173,10 +178,10 @@
 
                 })
             },
-            savePermission(){
+            savePermission() {
                 let parameter = this.dataDetail;
                 savePermission(parameter).then((res) => {
-                    if(res&&res>0){
+                    if (res && res > 0) {
                         this.dataDetail = {}
                         this.queryPageData()
                         this.dataDetailFlag = false
@@ -189,7 +194,7 @@
                 this.dataDetail = {}
                 this.dataDetailFlag = true
             },
-            openEditDataDetail(scope){
+            openEditDataDetail(scope) {
                 this.dataDetailFlag = true
                 this.dataDetail = {}
             }

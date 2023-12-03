@@ -41,6 +41,14 @@ const buildRouterTree = (arrayList, parent) => {
 }
 
 export const createTree = (arrayList, parent) => {
+    if(parent){
+
+    }else{
+        parent = {
+            id : "0",
+            children:[]
+        }
+    }
     if (arrayList && arrayList.length > 0) {
 
     } else {

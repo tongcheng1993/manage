@@ -21,12 +21,12 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="验证码：">
-                    <el-input prefix-icon="el-icon-picture" v-model="loginForm.value" placeholder="请输入验证码"></el-input>
+                    <el-input prefix-icon="el-icon-picture" v-model="loginForm.redisValue" placeholder="请输入验证码"></el-input>
                 </el-form-item>
                 <el-form-item label="验证码：">
                     <img
                             width="280px"
-                            :onload="captchaImgLoad"
+                            v-loading="captchaImgLoad"
                             :src="captchaImg"
                             @click="getCaptchaImg"
                             alt="加载验证码失败"
@@ -99,12 +99,6 @@
         data() {
             return {
                 name: "login",
-                page: {
-                    total: 0,
-                    current: 0,
-                    size: 10,
-                    orders: [],
-                },
                 captchaImgLoad: false,
                 captchaImg: "",
                 loginSubmitLoad: false,
@@ -112,7 +106,7 @@
                     userName: "",
                     passWord: "",
                     redisUuid: "",
-                    value: "",
+                    redisValue: "",
                 },
             };
         },

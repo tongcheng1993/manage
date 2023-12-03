@@ -5,7 +5,7 @@ export const info = (parameter) => {
     return get(url,parameter);
 }
 
-export const sendWsMessage = (parameter) => {
-    let url='/api/websocket/websocket/sendWsMessage';
+export const sendWsAllMessage = (parameter) => {
+    let url='/api/websocket/websocket/sendWsAllMessage';
     return postJson(url,parameter);
 }

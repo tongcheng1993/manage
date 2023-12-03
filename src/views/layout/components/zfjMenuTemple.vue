@@ -1,24 +1,24 @@
 <template>
     <div class="view_div">
         <template v-for="menu in menuList">
-            <template v-if="menu.showFlag && menu.showFlag > 0">
+            <template v-if="menu.showFlag ">
                 <el-submenu
-                        :index="menu.path"
-                        v-if="menu.children && menu.children.length > 0 && haveOneChildrenShow(menu.children)"
+                        :index='menu.path'
+                        v-if="menu.children && menu.children.length > 0 "
                 >
                     <template slot="title">
-                        <i :class="menu.iconFlag"></i>
-                        <span slot="title">{{ menu.name }}</span>
+                        <i :class="menu.icon"></i>
+                        <span slot="title">{{ menu.label }}</span>
                     </template>
                     <zfj-menu-template :menuList="menu.children"></zfj-menu-template>
                 </el-submenu>
                 <el-menu-item
-                        :index="menu.path"
+                        :index=" menu.path"
                         :key="menu.id"
                         v-else
                 >
-                    <i :class="menu.iconFlag"></i>
-                    <span slot="title">{{ menu.name }}</span>
+                    <i :class="menu.icon"></i>
+                    <span slot="title">{{ menu.label }}</span>
                 </el-menu-item>
             </template>
         </template>
@@ -33,28 +33,10 @@
             menuList: {
                 type: Array,
                 required: true,
-                default: [
-                    {
-                        parentId: 0,
-                        name: "首页",
-                        path: "/dashboard",
-                        component: "/dashboard/dashboard",
-                        showFlag: "1",
-                        iconFlag: "1",
-                    },
-                ],
+                default: [],
             },
         },
-        methods: {
-            haveOneChildrenShow(children) {
-                for (let i = 0; i < children.length; i++) {
-                    if (children[i].showFlag > 0) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-        },
+        methods: {},
         computed: {},
         watch: {},
         data() {
@@ -63,14 +45,14 @@
             };
         },
         mounted() {
+
         },
         beforeDestroy() {
         },
     };
 </script>
 
-<style >
-
+<style>
 
 
 </style>

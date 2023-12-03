@@ -13,52 +13,55 @@
 </template>
 
 <script>
-    import {sendWsMessage} from '../../../api/wsApi'
+    import {createWs, stopWs} from '../../../util/websocketUtil'
+
     export default {
         name: "zfjUserIcon",
         components: {},
         props: {},
         methods: {
-            async toNextPage(to) {
+            async toNextPage(to, query) {
                 await this.$router.push({
                     path: to,
-                    params: {},
+                    query: query,
                 });
             },
             init() {
-                this.createWs();
-            },
-            createWs() {
                 let _that = this
+                if (!!window.WebSocket && window.WebSocket.prototype.send) {
+                    console.log("您的浏览器支持Websocket通信协议")
+                } else {
+                    alert("您的浏览器不支持Websocket通信协议，请使用Chrome或者Firefox浏览器！"
+                    )
+                }
                 if (_that.token) {
-                    _that.sockjs = new SockJS("/api/websocket/ws?token=" + _that.token);
-                    _that.stompClient = Stomp.over(_that.sockjs)
-                    _that.stompClient.connect({}, function connectCallback() {
-                        _that.wsFlag = "success"
+                    let url = "/api/websocket/ws?token=" + _that.token;
+                    _that.sockJs = new SockJS(url);
+                    _that.stompClient = Stomp.over(_that.sockJs)
+                    _that.stompClient.connect({}, function () {
+                        _that.$store.state.wsFlag = "success"
+                        // 所有人都有的 接收系统对个人的消息
                         _that.stompClient.subscribe('/topic/public', function responseCallback(res) {
-                            console.log("res" + res.body)
-                        }, function responseErrCallback(err) {
-                            console.log("err" + err)
+                            console.log("/topic/public" + res.body)
+                        }, function responseCallbackErr(err) {
+                            console.log("/topic/public" + err)
                         })
 
-                        _that.sendWsMessage()
-                    }, function connectErrCallback() {
-                        _that.wsFlag = "warning"
+                        // 所有人都有的 接收个人对个人的消息 + "/message"
+                        _that.stompClient.subscribe("/webUser/topic/chat", function responseCallback(res) {
+                            console.log("/topic/chat/" + res.body)
+                        }, function responseCallbackErr(err) {
+                            console.log("/topic/chat" + err)
+                        })
+                    }, function () {
+                        _that.$store.state.wsFlag = "warning"
                     })
-
                 }
-
-
-            },
-            sendWsMessage(){
-                let parameter = {
-                    "businessType":"1",
-                    "userId":111,
-                    "obj":"1212"
-                }
-                sendWsMessage(parameter).then().catch()
             },
 
+            destroy() {
+
+            },
             toUserInfoView() {
                 this.toNextPage("/manageUser/userAccount");
             },
@@ -71,41 +74,41 @@
             token() {
                 return this.$store.state.token;
             },
-            wsMessage() {
-                return this.$store.state.wsMessage;
+            wsFlag() {
+                return this.$store.state.wsFlag;
             },
+
         },
         watch: {
             token: {
                 handler(newValue, oldValue) {
-                    console.log(newValue);
-                    console.log(oldValue);
+                    console.log("new:  token  " + newValue);
+                    console.log("old:  token  " + oldValue);
                 },
                 deep: true,
                 immediate: true,
             },
-            wsMessage: {
+            wsFlag: {
                 handler(newValue, oldValue) {
-                    console.log(newValue);
-                    console.log(oldValue);
+                    console.log("new:  wsFlag  " + newValue);
+                    console.log("old:   wsFlag " + oldValue);
                 },
                 deep: true,
                 immediate: true,
             },
+
         },
         data() {
             return {
-                name: "",
-                stompClient: null,
-                sockjs: null,
-                wsFlag: "warning",
+                sockJs: null,
+                stompClient: null
             };
         },
         mounted() {
             this.init();
         },
         beforeDestroy() {
-            this.stompClient.disconnect();
+            this.destroy()
         },
     };
 </script>

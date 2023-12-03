@@ -3,12 +3,11 @@
         <div>
             <el-table :data="page.records">
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="code" label="编码"></el-table-column>
-                <el-table-column prop="description" label="描述"></el-table-column>
+                <el-table-column prop="roleName" label="名称"></el-table-column>
+                <el-table-column prop="roleCode" label="编码"></el-table-column>
+                <el-table-column prop="roleDescription" label="描述"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" @click="detailRole(scope)">详情</el-button>
                         <el-dropdown>
                             <el-button type="primary">
                                 更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
@@ -16,8 +15,8 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="editRole(scope)">编辑</el-dropdown-item>
                                 <el-dropdown-item @click.native="openRoleMenuRelation(scope)">授予页面路由</el-dropdown-item>
-                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法</el-dropdown-item>
-                                <el-dropdown-item @click.native="">删除</el-dropdown-item>
+                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>
@@ -37,7 +36,8 @@
         </div>
         <div>
             <el-drawer :visible.sync="permissionDrawerFlag" direction="rtl" :title="drawerTitle">
-                <el-table ref="permissionListTable" :data="tableList" @selection-change="selectChangeHandle" max-height="250">
+                <el-table ref="permissionListTable" :data="permissionList" @selection-change="selectChangeHandle"
+                          max-height="250">
                     <el-table-column
                             type="selection"
                             width="55">
@@ -56,7 +56,7 @@
                     </el-table-column>
                     <el-table-column
                             fixed
-                            prop="code"
+                            prop="codeMethod"
                             label="权限编码"
                             width="150">
                     </el-table-column>
@@ -67,10 +67,10 @@
         <div>
             <el-drawer :visible.sync="menuDrawerFlag" direction="rtl" :title="drawerTitle">
                 <el-tree
-                        :data="treeList"
+                        :data="menuTree"
                         show-checkbox
                         node-key="id"
-                        ref="tree"
+                        ref="menuTree"
                         default-expand-all
                         :props="defaultProps"
                         :default-checked-keys="menuKeys"
@@ -90,11 +90,9 @@
 
 <script>
     import {
-        queryPageRole,
-        queryListPermission,
-        saveRolePermissionRelation,
-        queryListMenu,
-        saveRoleMenuRelation
+        queryPageManageRole,
+        queryListManageMenu,
+        queryListManagePermission,
     } from '../../api/manageUserApi'
     import {createTree} from "../../util/treeUtil";
 
@@ -112,35 +110,26 @@
                     orders: [],
                     records: [],
                 },
-                dataQo: {
-                    current: 0,
-                    size: 10,
-                    orders: [],
-                },
 
                 dataDetailFlag: false,
                 dataDetailTitle: "",
                 dataDetailFormTop: "right",
                 dataDetail: {},
+
                 roleId: "",
 
-
                 permissionDrawerFlag: false,
-                tableList: [],
+                permissionList: [],
                 permissionKeys: [],
 
                 menuDrawerFlag: false,
-                treeList: [],
-
+                menuTree: [],
                 menuKeys: [],
                 defaultProps: {
                     children: "children",
                     label: "name",
                 },
-                saveRolePermissionRelationMo: {
-                    roleId: "",
-                    permissionIdList: []
-                }
+
             };
         },
         // 其他数据改变影响目标数据
@@ -149,49 +138,46 @@
         watch: {
             page: {
                 handler(newValue, oldValue) {
-                    this.dataQo.current = newValue.current
-                    this.dataQo.size = newValue.size
-                    this.dataQo.orders = newValue.orders
+
                 },
                 deep: true
             }
         },
         methods: {
             // 跳转页面
-            async toNextPage(to) {
+            async toNextPage(to, query) {
                 await this.$router.push({
                     path: to,
-                    params: {},
+                    query: query,
                 });
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
-                this.dataQo.size = val;
-                this.queryPageRole()
+                this.page.size = val;
+                this.queryPageManageRole()
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
-                this.dataQo.current = val;
-                this.queryPageRole()
+                this.page.current = val;
+                this.queryPageManageRole()
             },
-            queryPageRole() {
-                let parameter = this.dataQo
-                queryPageRole(parameter).then((res) => {
+            queryPageManageRole() {
+                let parameter = this.page
+                queryPageManageRole(parameter).then((res) => {
                     this.page = res
                 }).catch((err) => {
-
+                    console.log(err)
                 })
             },
             openRolePermissionRelation(scope) {
-                this.permissionDrawerFlag = true
-                if(this.$refs.permissionListTable){
+                if (this.$refs.permissionListTable) {
                     this.$refs.permissionListTable.clearSelection();
                 }
-                this.saveRolePermissionRelationMo.roleId = scope.row.id
+                this.roleId = scope.row.id
                 let parameter = {
-                    roleCode: [scope.row.code]
+                    roleId: scope.row.id
                 }
-                queryListPermission(parameter).then((res) => {
+                queryListManagePermission(parameter).then((res) => {
                     this.permissionKeys = res
                     this.permissionKeys.forEach((val) => {
                         this.tableList.forEach((item) => {
@@ -200,8 +186,7 @@
                             }
                         })
                     })
-
-
+                    this.permissionDrawerFlag = true
                 })
             },
             selectChangeHandle(val) {
@@ -210,8 +195,8 @@
             },
             saveRolePermissionRelation() {
                 this.saveRolePermissionRelationMo.permissionIdList = []
-                if(this.permissionKeys){
-                    this.permissionKeys.forEach((val)=>{
+                if (this.permissionKeys) {
+                    this.permissionKeys.forEach((val) => {
                         this.saveRolePermissionRelationMo.permissionIdList.push(val.id)
                     })
                 }
@@ -227,22 +212,23 @@
                 })
             },
             openRoleMenuRelation(scope) {
-                if(this.menuKeys){
+                this.menuDrawerFlag = true
+                if (this.menuKeys && this.menuKeys.length > 0) {
                     this.menuKeys = []
                 }
-                if(this.$refs.tree){
-                    this.$refs.tree.setCheckedKeys([])
-                }
+                // if (this.$refs.tree) {
+                //     this.$refs.tree.setCheckedKeys([])
+                // }
                 this.roleId = scope.row.id
                 let parameter = {
-                    roleCode: [scope.row.code]
+                    roleId: scope.row.id
                 }
-                queryListMenu(parameter).then((res) => {
+                queryListManageMenu(parameter).then((res) => {
                     this.menuKeys = [];
                     for (let i = 0; i < res.length; i++) {
                         this.menuKeys.push(res[i].id.toString());
                     }
-                    this.menuDrawerFlag = true
+
                 })
             },
             saveRoleMenuRelation() {
@@ -264,27 +250,27 @@
             handleNodeClick(data) {
                 console.log(data)
             },
+
             init() {
-                this.queryPageRole();
+                this.queryPageManageRole();
                 let parameter = {}
-                queryListMenu(parameter).then((res) => {
-                    let parent = {
-                        id: '0',
-                        path: '/',
-                        name: 'container',
-                        component: '/layout/container',
-                        children: []
-                    }
-                    parent = createTree(res, parent);
-                    this.treeList = parent.children
+                queryListManageMenu(parameter).then((res) => {
+                    this.menuTree = createTree(res).children
+                    console.log(this.menuTree)
+                }).catch((err) => {
+                    console.log(err)
                 })
-                queryListPermission(parameter).then((res) => {
-                    this.tableList = res
+                queryListManagePermission(parameter).then((res) => {
+                    this.permissionList = res
+                    console.log(this.permissionList)
+                }).catch((err) => {
+                    console.log(err)
                 })
             }
 
         },
         created() {
+
 
         },
         mounted() {

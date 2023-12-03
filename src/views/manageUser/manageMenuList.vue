@@ -69,7 +69,7 @@
 </template>
 
 <script>
-    import {saveMenu, queryListMenu} from "../../api/manageUserApi";
+    import {saveMenu, queryListManageMenu} from "../../api/manageUserApi";
     import {createTree} from "../../util/treeUtil";
 
     export default {
@@ -128,11 +128,11 @@
                 this.dataDetail = data;
             },
             // 查询所有路由
-            queryListMenu() {
+            queryListManageMenu() {
+
                 let parameter = this.dataQo;
-                queryListMenu(parameter)
+                queryListManageMenu(parameter)
                     .then((res) => {
-                        this.dataList = res;
                         let parent = {
                             id: '0',
                             path: '/',
@@ -141,11 +141,21 @@
                             children: []
                         }
                         parent = createTree(res, parent);
-
                         this.treeList = parent.children
-                    })
-                    .catch((err) => {
-                    });
+                        console.log(this.treeList)
+                    }).catch((err) => {
+                    console.log(err)
+                });
+            },
+            init() {
+                let parameter = {};
+                queryListManageMenu(parameter)
+                    .then((res) => {
+                        this.treeList = createTree(res).children
+                        console.log(this.treeList)
+                    }).catch((err) => {
+                    console.log(err)
+                });
             },
             // 保存路由
             saveMenu() {
@@ -179,7 +189,7 @@
             },
         },
         mounted() {
-            this.queryListMenu();
+            this.init();
         },
         beforeDestroy() {
         },

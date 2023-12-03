@@ -1,15 +1,8 @@
-import {queryListArea} from '../api/areaApi'
 export default {
-    state:{
-        areaList:[],
+    state: {
+        areaList: [],
     },
-    mutations:{
-
-    },
-    actions:{
-
-    },
-    getters:{
-
-    }
+    mutations: {},
+    actions: {},
+    getters: {}
 }
