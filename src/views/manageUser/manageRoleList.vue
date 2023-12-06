@@ -15,8 +15,7 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="editRole(scope)">编辑</el-dropdown-item>
                                 <el-dropdown-item @click.native="openRoleMenuRelation(scope)">授予页面路由</el-dropdown-item>
-                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法
-                                </el-dropdown-item>
+                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>
@@ -33,6 +32,18 @@
                     :page-sizes="[10, 50, 100]"
             >
             </el-pagination>
+        </div>
+        <div>
+            <el-drawer :visible.sync="addDrawerFlag" :title="addTitle">
+                <el-form >
+
+                </el-form>
+            </el-drawer>
+            <el-drawer :visible.sync="resetDrawerFlag" :title="resetTitle">
+                <el-form >
+
+                </el-form>
+            </el-drawer>
         </div>
         <div>
             <el-drawer :visible.sync="permissionDrawerFlag" direction="rtl" :title="drawerTitle">
@@ -61,7 +72,7 @@
                             width="150">
                     </el-table-column>
                 </el-table>
-                <el-button @click="saveRolePermissionRelation()">保存</el-button>
+                <el-button @click="bindRoleAndPermissionDelBefore()">保存</el-button>
             </el-drawer>
         </div>
         <div>
@@ -93,6 +104,7 @@
         queryPageManageRole,
         queryListManageMenu,
         queryListManagePermission,
+        bindRoleAndPermissionDelBefore,
     } from '../../api/manageUserApi'
     import {createTree} from "../../util/treeUtil";
 
@@ -121,6 +133,11 @@
                 permissionDrawerFlag: false,
                 permissionList: [],
                 permissionKeys: [],
+                bindRoleAndPermissionDelBeforeMo: {
+                    roleId: "",
+                    permissionIdList: []
+                },
+
 
                 menuDrawerFlag: false,
                 menuTree: [],
@@ -170,45 +187,44 @@
                 })
             },
             openRolePermissionRelation(scope) {
+                this.permissionDrawerFlag = true
                 if (this.$refs.permissionListTable) {
                     this.$refs.permissionListTable.clearSelection();
                 }
-                this.roleId = scope.row.id
+                this.bindRoleAndPermissionDelBeforeMo.roleId = scope.row.id
                 let parameter = {
                     roleId: scope.row.id
                 }
                 queryListManagePermission(parameter).then((res) => {
                     this.permissionKeys = res
                     this.permissionKeys.forEach((val) => {
-                        this.tableList.forEach((item) => {
+                        this.permissionList.forEach((item) => {
                             if (val.id === item.id) {
                                 this.$refs.permissionListTable.toggleRowSelection(item, true)
                             }
                         })
                     })
-                    this.permissionDrawerFlag = true
+
                 })
             },
             selectChangeHandle(val) {
                 console.log(val)
                 this.permissionKeys = val
             },
-            saveRolePermissionRelation() {
-                this.saveRolePermissionRelationMo.permissionIdList = []
+            bindRoleAndPermissionDelBefore() {
+                this.bindRoleAndPermissionDelBeforeMo.permissionIdList = []
                 if (this.permissionKeys) {
                     this.permissionKeys.forEach((val) => {
-                        this.saveRolePermissionRelationMo.permissionIdList.push(val.id)
+                        this.bindRoleAndPermissionDelBeforeMo.permissionIdList.push(val.id)
                     })
                 }
-
-
-                let parameter = this.saveRolePermissionRelationMo
-                saveRolePermissionRelation(parameter).then((res) => {
+                let parameter = this.bindRoleAndPermissionDelBeforeMo
+                bindRoleAndPermissionDelBefore(parameter).then((res) => {
                     if (res) {
                         this.permissionDrawerFlag = false
                     }
                 }).catch((error) => {
-
+                    console.log(error)
                 })
             },
             openRoleMenuRelation(scope) {
@@ -256,13 +272,11 @@
                 let parameter = {}
                 queryListManageMenu(parameter).then((res) => {
                     this.menuTree = createTree(res).children
-                    console.log(this.menuTree)
                 }).catch((err) => {
                     console.log(err)
                 })
                 queryListManagePermission(parameter).then((res) => {
                     this.permissionList = res
-                    console.log(this.permissionList)
                 }).catch((err) => {
                     console.log(err)
                 })

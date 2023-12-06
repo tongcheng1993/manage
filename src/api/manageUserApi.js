@@ -38,12 +38,12 @@ export const queryListManagePermission = (parameter) => {
     let url = '/api/sys/manageUser/queryListManagePermission';
     return postJson(url, parameter);
 }
-export const savePermission = (parameter) => {
-    let url = '/api/sys/manageUser/manage/savePermission';
+export const addManagePermission = (parameter) => {
+    let url = '/api/sys/manageUser/addManagePermission';
     return postJson(url, parameter);
 }
-export const editPermission = (parameter) => {
-    let url = '/api/sys/manageUser/manage/editPermission';
+export const resetManagePermission = (parameter) => {
+    let url = '/api/sys/manageUser/resetManagePermission';
     return postJson(url, parameter);
 }
 export const removePermission = (parameter) => {
@@ -58,8 +58,8 @@ export const saveUserRoleRelation = (parameter) => {
     let url = '/api/sys/manageUser/manage/saveUserRoleRelation';
     return postJson(url, parameter);
 }
-export const saveRolePermissionRelation = (parameter) => {
-    let url = '/api/sys/manageUser/manage/saveRolePermissionRelation';
+export const bindRoleAndPermissionDelBefore = (parameter) => {
+    let url = '/api/sys/manageUser/bindRoleAndPermissionDelBefore';
     return postJson(url, parameter);
 }
 export const saveRoleMenuRelation = (parameter) => {

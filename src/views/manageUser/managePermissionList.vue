@@ -74,7 +74,7 @@
                     </el-form-item>
                     <el-form-item label="操作">
                         <el-button-group>
-                            <el-button @click="savePermission()">
+                            <el-button @click="addManagePermission()">
                                 新增
                             </el-button>
                             <el-button>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    import {queryPageManagePermission} from '../../api/manageUserApi'
+    import {queryPageManagePermission,addManagePermission} from '../../api/manageUserApi'
 
     export default {
         name: "managePermissionList",
@@ -143,12 +143,12 @@
 
         methods: {
             handleSizeChange(val) {
-                console.log(`每页  条`);
+                console.log("每页  "+val+"条");
                 this.dataQo.size = val;
                 this.queryPageData()
             },
             handleCurrentChange(val) {
-                console.log(`当前页: `);
+                console.log(`当前页: ` +val);
                 this.dataQo.current = val;
                 this.queryPageData()
             },
@@ -172,15 +172,15 @@
             // 查询数据
             queryPageData() {
                 let parameter = this.dataQo;
-                queryPagePermission(parameter).then((res) => {
+                queryPageManagePermission(parameter).then((res) => {
                     this.page = res
                 }).catch((err) => {
-
+                    console.log(err)
                 })
             },
-            savePermission() {
+            addManagePermission() {
                 let parameter = this.dataDetail;
-                savePermission(parameter).then((res) => {
+                addManagePermission(parameter).then((res) => {
                     if (res && res > 0) {
                         this.dataDetail = {}
                         this.queryPageData()
