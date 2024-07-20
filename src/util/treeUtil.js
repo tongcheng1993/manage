@@ -9,7 +9,7 @@ const buildRouterTree = (arrayList, parent) => {
     for (let i = 0; i < arrayList.length; i++) {
         let treeVo = arrayList[i]
 
-        if (treeVo.parentId === parent.id) {
+        if (treeVo.parentId === parent.tableId) {
             if (treeVo.path && parent.path) {
                 if (parent.path === '/') {
                     treeVo.path = parent.path + treeVo.path
@@ -45,7 +45,7 @@ export const createTree = (arrayList, parent) => {
 
     }else{
         parent = {
-            id : "0",
+            tableId : "0",
             children:[]
         }
     }
@@ -61,7 +61,7 @@ export const createTree = (arrayList, parent) => {
 const buildTree = (arrayList, parent) => {
     for (let i = 0; i < arrayList.length; i++) {
         let treeVo = arrayList[i]
-        if (treeVo.parentId === parent.id) {
+        if (treeVo.parentId === parent.tableId) {
             treeVo = buildTree(arrayList, treeVo)
             if (parent.children) {
                 parent.children.push(treeVo);

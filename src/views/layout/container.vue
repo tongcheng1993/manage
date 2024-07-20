@@ -22,59 +22,59 @@
 </template>
 
 <script>
-    import zfjHeader from './components/zfjHeader'
-    import zfjAsideMenu from './components/zfjAsideMenu'
-    import zfjFooter from './components/zfjFooter'
+import zfjHeader from './components/zfjHeader'
+import zfjAsideMenu from './components/zfjAsideMenu'
+import zfjFooter from './components/zfjFooter'
 
-    export default {
-        name: "container",
-        components: {
-            zfjHeader,
-            zfjAsideMenu,
-            zfjFooter
+export default {
+    name: "container",
+    components: {
+        zfjHeader,
+        zfjAsideMenu,
+        zfjFooter
+    },
+    props: {},
+    methods: {
+        init() {
         },
-        props: {},
-        methods: {
-            init() {
-            },
-        },
-        computed: {},
-        watch: {},
-        data() {
-            return {
-                name: 'container',
-            }
-        },
-        mounted() {
-            this.init()
-        },
-        beforeDestroy() {
+    },
+    computed: {},
+    watch: {},
+    data() {
+        return {
+            name: 'container',
         }
+    },
+    mounted() {
+        this.init()
+    },
+    beforeDestroy() {
     }
+}
 </script>
 
 <style scoped>
-    .el-header {
-        padding: 0;
-    }
+.el-header {
+    padding: 0;
+}
 
-    .a_container {
-        overflow: auto;
-        height: 100%;
-    }
+.a_container {
+    overflow: auto;
+    height: 100%;
+}
 
-    .h_container {
-        background-color: #42b983;
-        height: 10%;
-    }
+.h_container {
+    background-color: #42b983;
+    height: 10%;
+}
 
-    .m_container {
-        background-color: rosybrown;
-        height: 80%;
-    }
+.m_container {
+    background-color: rosybrown;
+    height: 80%;
+}
 
-    .f_container {
-        background-color: beige;
-        height: 10%;
-    }
+.f_container {
+    background-color: beige;
+    height: 10%;
+}
 </style>

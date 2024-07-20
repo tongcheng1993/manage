@@ -13,107 +13,99 @@
 </template>
 
 <script>
-    import {createWs, stopWs} from '../../../util/websocketUtil'
+import { startWs, stopWs } from '@/ws/index.js'
 
-    export default {
-        name: "zfjUserIcon",
-        components: {},
-        props: {},
-        methods: {
-            async toNextPage(to, query) {
-                await this.$router.push({
-                    path: to,
-                    query: query,
-                });
+export default {
+    name: "zfjUserIcon",
+    components: {},
+    props: {},
+
+    computed: {
+        token() {
+            return this.$store.state.token;
+        },
+        wsFlag() {
+            return this.$store.state.wsStore.wsFlag;
+        },
+        wsMessage() {
+            return this.$store.state.wsStore.wsMessage;
+        },
+    },
+    watch: {
+        token: {
+            handler(newValue, oldValue) {
+
             },
-            init() {
-                let _that = this
-                if (!!window.WebSocket && window.WebSocket.prototype.send) {
-                    console.log("您的浏览器支持Websocket通信协议")
-                } else {
-                    alert("您的浏览器不支持Websocket通信协议，请使用Chrome或者Firefox浏览器！"
-                    )
-                }
-                if (_that.token) {
-                    let url = "/api/websocket/ws?token=" + _that.token;
-                    _that.sockJs = new SockJS(url);
-                    _that.stompClient = Stomp.over(_that.sockJs)
-                    _that.stompClient.connect({}, function () {
-                        _that.$store.state.wsFlag = "success"
-                        // 所有人都有的 接收系统对个人的消息
-                        _that.stompClient.subscribe('/topic/public', function responseCallback(res) {
-                            console.log("/topic/public" + res.body)
-                        }, function responseCallbackErr(err) {
-                            console.log("/topic/public" + err)
-                        })
+            deep: true,
+            immediate: true,
+        },
+        wsFlag: {
+            handler(newValue, oldValue) {
 
-                        // 所有人都有的 接收个人对个人的消息 + "/message"
-                        _that.stompClient.subscribe("/webUser/topic/chat", function responseCallback(res) {
-                            console.log("/topic/chat/" + res.body)
-                        }, function responseCallbackErr(err) {
-                            console.log("/topic/chat" + err)
-                        })
-                    }, function () {
-                        _that.$store.state.wsFlag = "warning"
-                    })
+                if ("success" !== newValue) {
+                    startWs();
                 }
             },
-
-            destroy() {
-
-            },
-            toUserInfoView() {
-                this.toNextPage("/manageUser/userAccount");
-            },
-            removeToken() {
-                this.$store.commit("del_token");
-                location.reload();
-            },
+            deep: true,
+            immediate: true,
         },
-        computed: {
-            token() {
-                return this.$store.state.token;
+        wsMessage: {
+            handler(newValue, oldValue) {
+                if (newValue && newValue.length > 0) {
+                    let p = JSON.parse(newValue);
+                    if (p.obj) {
+                        alert(p.obj)
+                    }
+                }
             },
-            wsFlag() {
-                return this.$store.state.wsFlag;
-            },
-
+            deep: true,
+            immediate: true,
+        }
+    },
+    data() {
+        return {
+            wsCron: null,
+        };
+    },
+    methods: {
+        async toNextPage(to, query) {
+            await this.$router.push({
+                path: to,
+                query: query,
+            });
         },
-        watch: {
-            token: {
-                handler(newValue, oldValue) {
-                    console.log("new:  token  " + newValue);
-                    console.log("old:  token  " + oldValue);
-                },
-                deep: true,
-                immediate: true,
-            },
-            wsFlag: {
-                handler(newValue, oldValue) {
-                    console.log("new:  wsFlag  " + newValue);
-                    console.log("old:   wsFlag " + oldValue);
-                },
-                deep: true,
-                immediate: true,
-            },
-
+        cronMethod(){
+            console.log('one cron')
+            startWs()
         },
-        data() {
-            return {
-                sockJs: null,
-                stompClient: null
-            };
+        openCron(){
+            console.log('open cron')
+            this.wsCron = setInterval(this.cronMethod, 5000);
         },
-        mounted() {
-            this.init();
+        init() {
+            setTimeout(this.openCron, 10000);
         },
-        beforeDestroy() {
-            this.destroy()
+        destroy() {
+            stopWs();
+            if (this.wsCron) {
+                clearInterval(this.timerID);
+            }
         },
-    };
+        toUserInfoView() {
+            this.toNextPage("/userAccount");
+        },
+        removeToken() {
+            this.$store.commit("del_token");
+            location.reload();
+        },
+    },
+    mounted() {
+        this.init();
+    },
+    beforeDestroy() {
+        this.destroy()
+    },
+};
 </script>
 
-<style scoped>
-
-
-</style>
+<style scoped></style>

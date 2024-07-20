@@ -10,9 +10,9 @@
             </el-form>
         </div>
         <div>
-            <el-table :data="page.records" border>
+            <el-table :data="page.records" >
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="addrTo" label="收件人" width="180" align="center"></el-table-column>
+                <el-table-column prop="addrTo" label="收件人" ></el-table-column>
             </el-table>
             <el-pagination
                     layout="total, sizes, prev, pager, next, jumper"

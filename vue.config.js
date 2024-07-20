@@ -48,13 +48,13 @@ module.exports = {
             '/api': {
                 // 目标 API 地址
                 // 开发环境
-                target: 'https://mytc.nat123.net:443/',
+                target: 'http://192.168.84.99:9091/',
                 // 如果要代理 webSockets
                 ws: true,
                 // 设置跨域
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/api': '/api'
+                    '^/api': ''
                 }
             },
         },

@@ -242,7 +242,7 @@
                 queryListManageMenu(parameter).then((res) => {
                     this.menuKeys = [];
                     for (let i = 0; i < res.length; i++) {
-                        this.menuKeys.push(res[i].id.toString());
+                        this.menuKeys.push(res[i].tableId.toString());
                     }
 
                 })

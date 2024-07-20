@@ -2,7 +2,7 @@
 // import Vuex from 'vuex'
 import dic from './dic'
 import area from './area'
-
+import ws from './ws'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -10,9 +10,6 @@ export default new Vuex.Store({
         token: "",
         userInfo: {},
         menu: [],
-        wsFlag: "warning",
-        wsMessage: {},
-        topicMessage: {},
     },
     mutations: {
         set_token(state, token) {
@@ -25,21 +22,24 @@ export default new Vuex.Store({
             state.token = '';
             sessionStorage.removeItem('token')
         },
-        set_userInfo(state, userInfo) {
+        set_user_info(state, userInfo) {
             state.userInfo = userInfo;
         },
-        del_userInfo(state) {
-            state.userInfo = {}
-        },
+
         set_menu(state, menu) {
             state.menu = menu;
         },
-        del_menu(state) {
-            state.menu = []
-        },
+
     },
     actions: {},
     modules: {
+        wsStore:{
+            namespaced: true,
+            state: ws.state,
+            mutations: ws.mutations,
+            actions: ws.actions,
+            getters: ws.getters
+        },
         dicStore: {
             namespaced: true,
             state: dic.state,

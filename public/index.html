@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="/favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
     <link rel="stylesheet" href="/css/index.min.css?v=<%= htmlWebpackPlugin.options.date %>">
     <link rel="stylesheet" href="/css/nprogress.min.css?v=<%= htmlWebpackPlugin.options.date %>">
     <link rel="stylesheet" href="/css/wangEditor.min.css?v=<%= htmlWebpackPlugin.options.date %>">
@@ -16,31 +19,34 @@
     <link rel="stylesheet" href="/css/myCss.css?v=<%= htmlWebpackPlugin.options.date %>">
 
 </head>
+
 <body>
-<noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-        Please enable it to continue.</strong>
-</noscript>
-<div id="app">
-    <div>
-        正在加载资源，请稍后
+    <noscript>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+                Please enable it to continue.</strong>
+    </noscript>
+    <div id="app">
+        <div>
+            正在加载资源，请稍后
+        </div>
     </div>
-</div>
-<!-- built files will be auto injected -->
-<script type="text/javascript" src="/js/vue.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/vuex.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/vue-router.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/axios.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/index.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/nprogress.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/wangEditor.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/echarts.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/vue-baidu-map.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/sockjs.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/stomp.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<script type="text/javascript" src="/js/bpmn-modeler.production.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-<% if (process.env.NODE_ENV=='production' ) { %>
-<!--<script type="text/javascript" src="/js/myJs.js?v=<%= htmlWebpackPlugin.options.date %>"></script>-->
-<% } %>
+    <!-- built files will be auto injected -->
+    <script type="text/javascript" src="/js/vue.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/vuex.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/vue-router.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/axios.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/index.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/nprogress.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/wangEditor.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/echarts.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/vue-baidu-map.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/sockjs.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/stomp.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript"
+        src="/js/bpmn-modeler.production.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <% if (process.env.NODE_ENV=='production' ) { %>
+        <script type="text/javascript" src="/js/myJs.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+        <% } %>
 </body>
+
 </html>
