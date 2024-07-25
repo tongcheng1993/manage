@@ -1,6 +1,6 @@
 <template>
     <div class="view_div">
-        <el-menu router @open="handleOpen" @close="handleClose" @select="handleSelect">
+        <el-menu router @open="handleOpen" @close="handleClose" @select="handleSelect" collapse="true">
             <zfj-menu-temple :menuList="menu"></zfj-menu-temple>
         </el-menu>
     </div>
@@ -21,16 +21,13 @@ export default {
 
         },
         handleOpen(key, keyPath) {
-            console.log("handleOpen" + key)
-            console.log("handleOpen" + keyPath)
+          
         },
         handleClose(key, keyPath) {
-            console.log("handleClose" + key)
-            console.log("handleClose" + keyPath)
+           
         },
         handleSelect(key, keyPath) {
-            console.log("handleSelect" + key)
-            console.log("handleSelect" + keyPath)
+            
         },
     },
     computed: {
@@ -41,7 +38,7 @@ export default {
     watch: {
         menu: {
             handler(newValue, oldValue) {
-               
+
             },
             deep: true,
             immediate: true,
@@ -50,6 +47,7 @@ export default {
     data() {
         return {
             name: 'asideMenu',
+
         }
     },
     mounted() {
@@ -60,4 +58,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.el-menu {
+    border: 0;
+}
+
+.el-menu--collapse {
+    width: 100%;
+}
+</style>

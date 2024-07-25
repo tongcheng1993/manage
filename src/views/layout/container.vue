@@ -5,13 +5,22 @@
                 <zfj-header></zfj-header>
             </el-header>
             <el-container class="m_container">
-                <el-aside>
+                <el-aside width="200px">
                     <zfj-aside-menu></zfj-aside-menu>
                 </el-aside>
                 <el-main>
-                    <transition name="el-fade-in-linear">
-                        <router-view></router-view>
-                    </transition>
+                    <el-tabs type="border-card" v-model="currentTab" closable @tab-click="clickTab"
+                        @tab-remove="removeTab">
+                        <template v-for="item in tagList">
+                            <el-tab-pane :label="item.label" :name="item.path">
+                                <transition name="el-fade-in-linear">
+                                    <router-view></router-view>
+                                </transition>
+                            </el-tab-pane>
+                        </template>
+
+                    </el-tabs>
+
                 </el-main>
             </el-container>
             <el-footer class="f_container">
@@ -34,27 +43,80 @@ export default {
         zfjFooter
     },
     props: {},
-    methods: {
-        init() {
+
+    computed: {
+        tagList() {
+            return this.$store.state.tagList;
+        },
+        currentTab() {
+            return this.$store.state.currentTag;
         },
     },
-    computed: {},
-    watch: {},
-    data() {
-        return {
-            name: 'container',
-        }
+    watch: {
     },
     mounted() {
         this.init()
     },
     beforeDestroy() {
-    }
+    },
+    data() {
+        return {
+            name: 'container',
+
+        }
+    },
+    methods: {
+        init() {
+
+        },
+        // 跳转页面
+        async toNextPage(to, query) {
+            await this.$router.push({
+                path: to,
+                query: query,
+            });
+        },
+        clickTab(tab, event) {
+            this.toNextPage(tab.name, {})
+        },
+        removeTab(targetName) {
+            let tabs = this.tagList;
+            if (tabs.length > 1) {
+                let activeName = this.currentTab;
+                if (activeName === targetName) {
+                    tabs.forEach((tab, index) => {
+                        if (tab.path === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.path;
+                            }
+                        }
+                    });
+                }
+                let list = tabs.filter(tab => tab.path !== targetName);
+                this.$store.commit("set_to_tag", activeName);
+                this.$store.commit("set_tag_list", list);
+            } else {
+                // 页面有提醒
+                ELEMENT.Message({
+                    showClose: true,
+                    message: "至少保留一个tab页",
+                    type: "warning"
+                })
+            }
+
+        }
+    },
+
 }
 </script>
 
 <style scoped>
 .el-header {
+    padding: 0;
+}
+
+.el-main {
     padding: 0;
 }
 

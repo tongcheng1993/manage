@@ -60,6 +60,7 @@
         // 本页面计算属性
         computed: {
             areaType() {
+                store.dispatch("dicStore/actionsInitDic", '')
                 return this.$store.getters['dicStore/getDic']['area_type']
             }
         },

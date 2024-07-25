@@ -19,11 +19,12 @@
         <div>
             <el-button-group>
                 <el-button @click="openAdd">新增</el-button>
-                <el-button @click="">批量删除</el-button>
+                <el-button @click="openBatchDel">批量删除</el-button>
             </el-button-group>
         </div>
         <div>
-            <el-table :data="page.records" v-loading="tableLoading" @row-click="openDetail">
+            <el-table ref="dataTable" :data="page.records" v-loading="tableLoading" @row-click="openDetail"
+                @selection-change="handleSelectionChange">
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="userName" label="账号"></el-table-column>
                 <el-table-column prop="shortName" label="昵称"></el-table-column>
@@ -124,6 +125,21 @@
                 </el-form>
             </el-dialog>
         </div>
+        <div v-if="batchDelFlag">
+            <el-dialog :visible.sync="batchDelFlag" :title="dataTitle">
+                <el-form label-width="100px">
+                    <el-form-item label="提示">
+                        确定批量删除？
+                    </el-form-item>
+                    <el-form-item label="操作">
+                        <el-button-group>
+                            <el-button @click="del">确定</el-button>
+                            <el-button @click="delFlag = false">取消</el-button>
+                        </el-button-group>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -132,15 +148,14 @@
 export default {
     name: "demoView",
     // 引用组件
-    components: {
-
-    },
+    components: {},
     // 上级组件向本页面传递的参数
     props: {},
-    // 本页面计算属性
-    computed: {},
     // 本页面监听属性
     watch: {},
+    // 本页面计算属性
+    computed: {},
+
     // 数据
     data() {
         return {
@@ -155,13 +170,13 @@ export default {
                 userName: "",
                 shortName: "",
             },
+            tableSelection: [],
             detailFlag: false,
             addFlag: false,
             delFlag: false,
             updateFlag: false,
-            dataOne: {
-
-            },
+            batchDelFlag: false,
+            dataOne: {},
             dataTitle: "",
         };
     },
@@ -211,11 +226,13 @@ export default {
             }
             this.queryPageData()
         },
+        // 列表选择
+        handleSelectionChange(val) {
+            this.tableSelection = val;
+        },
         // 查看详情
         openDetail(row, column, event) {
-            this.dataOne = {
-
-            }
+            this.dataOne = {}
             this.dataTitle = "详情"
             this.detailFlag = true
             let p = {
@@ -223,17 +240,14 @@ export default {
             }
             getManageUserById(p).then((res) => {
                 this.dataOne = res
-
             }).catch((err) => {
-                alert(err)
+                this.detailFlag = false
             });
 
         },
         // 打开新增
         openAdd() {
-            this.dataOne = {
-
-            }
+            this.dataOne = {}
             this.dataTitle = "新增"
             this.addFlag = true
         },
@@ -281,6 +295,7 @@ export default {
             this.delFlag = true
             thid.dataOne = scope.row
         },
+
         // 保存删除
         del() {
             this.delFlag = false

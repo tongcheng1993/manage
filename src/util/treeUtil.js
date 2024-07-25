@@ -8,7 +8,6 @@ export const createRouterTree = (arrayList, parent) => {
 const buildRouterTree = (arrayList, parent) => {
     for (let i = 0; i < arrayList.length; i++) {
         let treeVo = arrayList[i]
-
         if (treeVo.parentId === parent.tableId) {
             if (treeVo.path && parent.path) {
                 if (parent.path === '/') {

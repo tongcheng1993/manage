@@ -11,9 +11,20 @@ export const saveDic = (params) => {
 export const delDic = (params) => {
     let parameter = params;
     let url = "/api/sys/dic/delDic";
-    return postForm(url, parameter);
+    return postJson(url, parameter);
 };
 
+export const updateDic = (params) => {
+    let parameter = params;
+    let url = "/api/sys/dic/updateDic";
+    return postJson(url, parameter);
+};
+
+export const queryListDic = (params) => {
+    let parameter = params;
+    let url = "/api/sys/dic/queryListDic";
+    return postJson(url, parameter);
+};
 
 export const queryPageDic = (params) => {
     let parameter = params;
@@ -21,6 +32,11 @@ export const queryPageDic = (params) => {
     return postJson(url, parameter);
 };
 
+export const getDicById = (params) => {
+    let parameter = params;
+    let url = "/api/sys/dic/getDicById";
+    return postJson(url, parameter);
+};
 
 
 
@@ -50,4 +66,10 @@ export const getAllDicDetail = (params) => {
     let parameter = params;
     let url = "/api/sys/dic/getAllDicDetail";
     return postJson(url, parameter);
+};
+
+export const getDicByCode = (params) => {
+    let parameter = params;
+    let url = "/api/sys/dic/getDicByCode";
+    return postForm(url, parameter);
 };

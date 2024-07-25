@@ -36,8 +36,8 @@
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="openUpdate(scope)">编辑</el-dropdown-item>
-                                <el-dropdown-item @click.native="openRoleListTable(scope)">授予角色</el-dropdown-item>
-                                <el-dropdown-item @click.native="">重置密码</el-dropdown-item>
+                                <el-dropdown-item @click.native="openUserRoleRelation(scope)">授予角色</el-dropdown-item>
+                                <el-dropdown-item @click.native="openResetPassWord(scope)">重置密码</el-dropdown-item>
                                 <el-dropdown-item @click.native="openDel(scope)">删除</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -129,7 +129,7 @@
             <el-dialog :visible.sync="dialog_0" :title="dataTitle">
                 <el-form>
                     <el-form-item label="新密码">
-                        <el-input v-model="resetPassWordMo.passWord"></el-input>
+                        <el-input v-model="dataOne.passWord"></el-input>
                     </el-form-item>
                     <el-form-item label="操作">
                         <el-button-group>
@@ -152,17 +152,15 @@
                     <el-table-column prop="roleCode" label="编码"></el-table-column>
                     <el-table-column prop="roleDescription" label="描述"></el-table-column>
                 </el-table>
-                <el-form>
-                    <el-form-item label="操作">
-                        <el-button-group>
-                            <el-button @click="saveUserRoleRelation">
-                                保存
-                            </el-button>
-                            <el-button @click="dialog_1 = false">
-                                返回
-                            </el-button>
-                        </el-button-group>
-                    </el-form-item></el-form>
+
+                <el-button-group>
+                    <el-button @click="saveUserRoleRelation">
+                        保存
+                    </el-button>
+                    <el-button @click="dialog_1 = false">
+                        返回
+                    </el-button>
+                </el-button-group>
 
             </el-dialog>
         </div>
@@ -174,6 +172,8 @@ import {
     queryPageManageUser,
     getManageUserById,
     addManageUser,
+    delManageUser,
+    updateManageUser,
     resetPassWord,
     queryListManageRole,
     bindUserAndRoleDelBefore
@@ -281,27 +281,22 @@ export default {
         },
         // 查看详情
         openDetail(row, column, event) {
-            this.dataOne = {
-
-            }
+            this.dataOne = {}
             this.dataTitle = "详情"
-            this.detailFlag = true
             let p = {
-                id: row.tableId
+                tableId: row.tableId
             }
             getManageUserById(p).then((res) => {
                 this.dataOne = res
-
+                this.detailFlag = true
             }).catch((err) => {
-                alert(err)
+
             });
 
         },
         // 打开新增
         openAdd() {
-            this.dataOne = {
-
-            }
+            this.dataOne = {}
             this.dataTitle = "新增"
             this.addFlag = true
         },
@@ -314,52 +309,57 @@ export default {
                     this.addFlag = false
                 }
             }).catch((err) => {
-                alert(err)
+               
             })
-
-
-
-
         },
         // 打开编辑
         openUpdate(scope) {
-            this.dataOne = {
-
-            }
+            this.dataOne = {}
             this.dataTitle = "编辑"
-            this.updateFlag = true
             let p = {
-                id: scope.row.tableId
+                tableId: scope.row.tableId
             }
             getManageUserById(p).then((res) => {
                 this.dataOne = res
-
+                this.updateFlag = true
             }).catch((err) => {
-                alert(err)
+            
             });
 
 
         },
         // 保存编辑
         update() {
-
-
-            this.updateFlag = false
-
-
+            let parameter = this.dataOne
+            updateManageUser(parameter).then((res) => {
+                if (res) {
+                    this.queryPageData();
+                    this.updateFlag = false
+                }
+            }).catch((err) => {
+               
+            })
         },
         // 打开删除
         openDel(scope) {
-            this.dataOne = {
-
-            }
+            this.dataOne = {}
             this.dataTitle = "删除"
             this.delFlag = true
-            thid.dataOne = scope.row
+            this.dataOne = scope.row
         },
         // 保存删除
         del() {
-            this.delFlag = false
+            let p = {
+                tableId: this.dataOne.tableId
+            }
+            delManageUser(p).then((res) => {
+                if (res) {
+                    this.delFlag = false
+                }
+            }).catch((err) => {
+
+            })
+
         },
         // 初始化
         init() {
@@ -380,22 +380,19 @@ export default {
         },
 
 
-        openRoleListTable(scope) {
-            this.dataOne = {
-
-            }
+        openUserRoleRelation(scope) {
+            this.dataOne = {}
             this.dataTitle = "授予角色"
             this.dataOne.userId = scope.row.tableId
-            this.dialog_1 = true
             if (this.$refs.roleListTable) {
                 this.$refs.roleListTable.clearSelection()
             }
-
             let parameter = {
                 userId: scope.row.tableId
             }
             queryListManageRole(parameter).then((res) => {
                 this.scopeRoleList = res
+                this.dialog_1 = true
                 this.$nextTick(() => {
                     this.scopeRoleList.forEach((val) => {
                         this.roleList.forEach((item) => {
@@ -404,9 +401,10 @@ export default {
                             }
                         })
                     })
+
                 })
             }).catch((error) => {
-                alert(error)
+
             })
 
         },
@@ -430,30 +428,22 @@ export default {
             })
         },
 
-        openResetPassWordDataDetail(scope) {
-            this.resetPassWordMo.id = scope.row.id
+        openResetPassWord(scope) {
+            this.dataOne = {}
+            this.dataTitle = "重置密码"
+            this.dataOne.tableId = scope.row.tableId
             this.dialog_0 = true
         },
         resetPassWord() {
-            let parameter = this.resetPassWordMo
+            let parameter = this.dataOne
             resetPassWord(parameter).then((res) => {
-                if (res && res.id) {
+                if (res) {
                     this.dialog_0 = false
                 }
-            }).catch()
-        },
-        addManageUser() {
-            let parameter = this.dataDetail
-            addManageUser(parameter).then((res) => {
-                if (res) {
-                    this.queryPageManageUser();
-                    this.dataDetailFlag = false
-                }
             }).catch((err) => {
-                console.log(err)
+
             })
         },
-
     },
     // 页面渲染之前
     created() {

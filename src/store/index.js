@@ -10,8 +10,43 @@ export default new Vuex.Store({
         token: "",
         userInfo: {},
         menu: [],
+        currentTag:"/dashboard",
+        tagList:[{
+            label : "首页",
+            path:"/dashboard",
+        }]
     },
     mutations: {
+        set_to_tag(state, one){
+            if(one){
+                if(state.currentTag != one){
+                    state.currentTag = one
+                }
+            }
+           
+        },
+        set_tag_list(state, list){
+            if(list){
+                state.tagList=list
+            }
+        },
+        add_one_tag(state, one){
+            if(one){
+                if(state.tagList){
+                    let flag = true
+                    for(let i = 0 ; i< state.tagList.length;i++){
+                        let item = state.tagList[i]
+                        if(item.path === one.path){
+                            flag = false
+                        }
+                    }
+                    if(flag){
+                        state.tagList.push(one)
+                    }
+                }
+            }
+            
+        },
         set_token(state, token) {
             state.menu = []
             state.token = token;
@@ -31,7 +66,9 @@ export default new Vuex.Store({
         },
 
     },
-    actions: {},
+    actions: {
+
+    },
     modules: {
         wsStore:{
             namespaced: true,

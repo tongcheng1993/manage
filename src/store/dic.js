@@ -1,6 +1,10 @@
+import { getAllDicDetail, getDicByCode } from '../api/dicApi'
 export default {
     state: {
-        dicList: [],
+        dic: {
+            area_type: [],
+
+        },
     },
     mutations: {
         setDicItemList(state, data) {
@@ -8,19 +12,41 @@ export default {
         }
     },
     actions: {
-        setDicItemList(context, data) {
-            if (context.state.dic[data.code] && context.state.dic[data.code].length > 0) {
+        actionsInitDic(context, data) {
+            if (data) {
+                if (context.state.dic[data] && context.state.dic[data].length > 0) {
 
-            } else {
-                let parameter = {
-                    dicCode: data.code
-                }
-                queryListDicItem(parameter).then((res) => {
-                    let vo = {
-                        code: data.code,
-                        list: res
+                } else {
+                    let parameter = {
+                        dicCode: data
                     }
-                    context.commit('setDicItemList', vo)
+                    getDicByCode(parameter).then((res) => {
+                        if (res) {
+                            let vo = {
+                                code: res.dicCode,
+                                list: res.dicItemVoList
+                            }
+                            context.commit('setDicItemList', vo)
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }
+            } else {
+                let parameter = {}
+                getAllDicDetail(parameter).then((res) => {
+                    if (res) {
+                        for (let i = 0; i < res.length; i++) {
+                            let item = res[res]
+                            let vo = {
+                                code: item.dicCode,
+                                list: item.dicItemVoList
+                            }
+                            context.commit('setDicItemList', vo)
+                        }
+                    }
+                }).catch((err) => {
+                    console.log(err)
                 })
             }
         }

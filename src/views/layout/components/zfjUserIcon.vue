@@ -32,13 +32,7 @@ export default {
         },
     },
     watch: {
-        token: {
-            handler(newValue, oldValue) {
 
-            },
-            deep: true,
-            immediate: true,
-        },
         wsFlag: {
             handler(newValue, oldValue) {
 
@@ -100,6 +94,7 @@ export default {
         },
     },
     mounted() {
+        
         this.init();
     },
     beforeDestroy() {

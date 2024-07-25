@@ -13,40 +13,37 @@
                 <el-col :span="12">
                     <el-row>
                         <el-col>
-                            <el-button @click="openTopMenu()">增加顶级路由</el-button>
+                            <el-button @click="openAddTopMenu()">增加顶级路由</el-button>
                             <el-button @click="openNextMenu()">增加下级路由</el-button>
                             <el-button @click="openEditMenu()">编辑当前路由</el-button>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col>
-                            <el-form :model="dataDetail" ref="dataDetailForm">
+                            <el-form :model="dataOne">
                                 <el-form-item label="上级id">
-                                    <el-input v-model="dataDetail.parentId" :disabled="dataDetailItemFlag"></el-input>
+                                    <el-input v-model="dataOne.parentId"></el-input>
                                 </el-form-item>
                                 <el-form-item label="自身id">
-                                    <el-input v-model="dataDetail.id" :disabled="dataDetailItemFlag"></el-input>
+                                    <el-input v-model="dataOne.tableId"></el-input>
                                 </el-form-item>
                                 <el-form-item label="名字">
-                                    <el-input v-model="dataDetail.name" :disabled="dataDetailItemFlag"></el-input>
+                                    <el-input v-model="dataOne.name"></el-input>
                                 </el-form-item>
                                 <el-form-item label="路径">
-                                    <el-input v-model="dataDetail.path" :disabled="dataDetailItemFlag"></el-input>
+                                    <el-input v-model="dataOne.path"></el-input>
                                 </el-form-item>
                                 <el-form-item label="组件地址">
-                                    <el-input v-model="dataDetail.component" :disabled="dataDetailItemFlag"></el-input>
+                                    <el-input v-model="dataOne.component"></el-input>
                                 </el-form-item>
                                 <el-form-item label="是否展示">
-                                    <el-input v-model="dataDetail.showFlag" :disabled="dataDetailItemFlag"></el-input>
+                                    <el-input v-model="dataOne.showFlag"></el-input>
                                 </el-form-item>
                                 <el-form-item label="图标">
-                                    <el-input v-model="dataDetail.iconFlag" :disabled="dataDetailItemFlag"></el-input>
+                                    <el-input v-model="dataOne.icon"></el-input>
                                 </el-form-item>
                                 <el-form-item label="排序">
-                                    <el-input v-model="dataDetail.sortNum" :disabled="dataDetailItemFlag"></el-input>
-                                </el-form-item>
-                                <el-form-item label="操作">
-                                    <el-button @click="saveMenu()">保存</el-button>
+                                    <el-input v-model="dataOne.sortNum"></el-input>
                                 </el-form-item>
                             </el-form>
                         </el-col>
@@ -54,11 +51,26 @@
                 </el-col>
             </el-row>
         </div>
+        <div v-if="addFlag">
+            <el-dialog :visible.sync="addFlag" :title="dataTitle">
+                <el-form>
+                    <el-form-item label="上级id">
+                        <el-input v-model="dataOne.parentId"></el-input>
+                    </el-form-item>
+                    <el-form-item label="操作">
+                        <el-button-group>
+                            <el-button @click="saveMenu()">保存</el-button>
+                            <el-button @click="addFlag = false">取消</el-button>
+                        </el-button-group>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
 <script>
-import { saveMenu, queryListManageMenu } from "../../api/manageUserApi";
+import { addManageMenu, queryListManageMenu } from "../../api/manageUserApi";
 import { createTree } from "../../util/treeUtil";
 
 export default {
@@ -66,43 +78,36 @@ export default {
     components: {},
     // 上级组件向本页面传递的参数
     props: {},
+    // 本页面计算属性
+    computed: {},
+    // 本页面监听属性
+    watch: {},
+    // 数据开始绑定
+    mounted() {
+
+        this.init();
+    },
+    beforeDestroy() {
+
+    },
     data() {
         return {
-            dataQo: {},
             dataList: [],
             treeList: [],
-            dataDetailFlag: false,
-            dataDetailTitle: "",
-            dataDetailFormTop: "right",
-            dataDetail: {
-                parentId: "",
-                sortNum: "",
-                id: "",
-                name: "",
-                path: "",
-                component: "",
-                showFlag: "",
-                iconFlag: "",
-            },
-            dataDetailItemFlag: true,
+            dataOne: {},
+            dataTitle: "",
+            detailFlag: false,
+
+
+
+
             defaultProps: {
                 children: "children",
                 label: "name",
             },
         };
     },
-    // 本页面计算属性
-    computed: {},
-    // 本页面监听属性
-    watch: {
-        dataList: {
-            handler(newValue, oldValue) {
-                console.log("new", newValue);
-                console.log("old", oldValue);
-            },
-            deep: true,
-        },
-    },
+
 
     methods: {
         // 跳转页面
@@ -114,35 +119,34 @@ export default {
         },
         // 选择路由
         handleNodeClick(data) {
-            this.dataDetail = data;
+            this.dataOne = data;
         },
         // 查询所有路由
-        queryListManageMenu() {
+        queryAllManageMenu() {
+            queryListManageMenu({}).then((res) => {
+                let parent = {
+                    tableId: "0",
+                    path: '/',
+                    name: 'container',
+                    component: '/layout/container',
+                    children: []
+                }
+                this.dataList = res
+                parent = createTree(res, parent);
+                this.dataList.push(parent);
+                this.treeList = parent.children
 
-            let parameter = this.dataQo;
-            queryListManageMenu(parameter)
-                .then((res) => {
-                    let parent = {
-                        tableId: "0",
-                        path: '/',
-                        name: 'container',
-                        component: '/layout/container',
-                        children: []
-                    }
-                    parent = createTree(res, parent);
-                    this.treeList = parent.children
+            }).catch((err) => {
 
-                }).catch((err) => {
-                    console.log(err)
-                });
+            });
         },
         init() {
-            this.queryListManageMenu();
+            this.queryAllManageMenu();
         },
         // 保存路由
         saveMenu() {
             let parameter = this.dataDetail
-            saveMenu(parameter).then((res) => {
+            addManageMenu(parameter).then((res) => {
                 if (res) {
                     this.queryListMenu();
                     this.dataDetailItemFlag = true;
@@ -151,11 +155,12 @@ export default {
 
             })
         },
-        openTopMenu() {
-            this.dataDetail = {
+        // 打开增加顶级路由
+        openAddTopMenu() {
+            this.dataOne = {
                 parentId: 0
             }
-            this.dataDetailItemFlag = false;
+            this.addFlag = true;
         },
         // 打开下级路由
         openNextMenu() {
@@ -170,12 +175,7 @@ export default {
             this.dataDetailItemFlag = false;
         },
     },
-    mounted() {
-       
-        this.init();
-    },
-    beforeDestroy() {
-    },
+
 };
 </script>
 

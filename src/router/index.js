@@ -32,7 +32,7 @@ const router = new VueRouter({
     routes
 })
 
-function loadPageByRoutes (str) {
+function loadPageByRoutes(str) {
     return function (resolve) {
         require([`@/views${str}.vue`], resolve)
     }
@@ -67,48 +67,38 @@ router.beforeEach((to, from, next) => {
         } else {
             //登陆后用户单独路由是否加载完成
             if (store.state.menu.length === 0) {
-             
                 getMenu({}).then((res) => {
-                    if(res && res.length > 0){
-
-                    }else{
-                        res = [{
-                            tableId: "123",
-                            parentId: "0",
-                            path: 'dashboard',
-                            name: 'dashboard',
-                            component: '/dashboard/dashboard',
-                            label:"首页",
-                            showFlag:true,
-                        }]
+                    if (res && res.length > 0) {
+                        let parent = {
+                            tableId: "0",
+                            path: '/',
+                            name: 'container',
+                            component: '/layout/container',
+                            redirect: '/dashboard',
+                            children: []
+                        }
+                        parent = createRouterTree(res, parent)
+                        let menu = []
+                        menu.push(parent)
+                        let aa = filterAsyncRouter(menu)
+                        aa.push({
+                            path: '/*',
+                            name: 'lostError',
+                            component: () => import('@/views/lost404/lost404.vue')
+                        })
+                        router.addRoutes(aa)
+                        store.commit("set_menu", parent.children)
                     }
-                    let parent = {
-                        tableId: "0",
-                        path: '/',
-                        name: 'container',
-                        component: '/layout/container',
-                        redirect: '/dashboard',
-                        children: []
-                    }
-            
-                    parent = createRouterTree(res, parent)
-                    let menu = []
-                    menu.push(parent)
-                    let aa = filterAsyncRouter(menu)
-                    aa.push({
-                        path: '/*',
-                        name: 'lostError',
-                        component: () => import('@/views/lost404/lost404.vue')
-                    })
-                    router.addRoutes(aa)
-                    store.commit("set_menu", parent.children)
                     next({ ...to, replace: true })
-                }).catch((err)=>{
-                    console.log(err)
+                }).catch((err) => {
+
                 })
             } else {
-
-                store.dispatch("dicStore/actionsInitDic", {})
+                store.commit("add_one_tag", {
+                    label: to.name,
+                    path: to.path,
+                })
+                store.commit("set_to_tag", to.path)
                 next();
             }
         }

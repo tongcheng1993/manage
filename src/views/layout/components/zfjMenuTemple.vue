@@ -5,13 +5,15 @@
                 <el-submenu :index='menu.path' v-if="menu.children && menu.children.length > 0">
                     <template slot="title">
                         <i :class="menu.icon"></i>
-                        <span slot="title">{{ menu.label }}</span>
+                        {{ menu.label }}
                     </template>
                     <zfj-menu-template :menuList="menu.children"></zfj-menu-template>
                 </el-submenu>
                 <el-menu-item :index="menu.path" :key="menu.tableId" v-else>
                     <i :class="menu.icon"></i>
-                    <span slot="title">{{ menu.label }}</span>
+                    {{ menu.label }}
+                       
+                    
                 </el-menu-item>
             </template>
         </template>
