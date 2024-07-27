@@ -18,7 +18,8 @@ export const startWs = () => {
             stompClient.connect({}, function () {
                 store.commit("wsStore/set_ws_flag", "success");
                 subscribe("/topic/public")
-                subscribe("/user/topic/chat") 
+                subscribe("/user/topic/chat")
+                subscribe("/user/topic/logout")
             }, function () {
                 store.commit("wsStore/set_ws_flag", "warning");
             })

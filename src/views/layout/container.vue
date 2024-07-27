@@ -9,18 +9,14 @@
                     <zfj-aside-menu></zfj-aside-menu>
                 </el-aside>
                 <el-main>
-                    <el-tabs type="border-card" v-model="currentTab" closable @tab-click="clickTab"
-                        @tab-remove="removeTab">
-                        <template v-for="item in tagList">
-                            <el-tab-pane :label="item.label" :name="item.path">
-                                <transition name="el-fade-in-linear">
-                                    <router-view></router-view>
-                                </transition>
-                            </el-tab-pane>
-                        </template>
+                    <transition name="el-fade-in-linear">
+                        <router-view></router-view>
+                    </transition>
+                    <!-- <el-tabs type="border-card" v-model="currentTab" closable @tab-click="clickTab" @tab-remove="removeTab">
+                        <el-tab-pane v-for="item in tagList" :label="item.label" :name="item.path"> -->
 
-                    </el-tabs>
-
+                    <!-- </el-tab-pane>
+                    </el-tabs> -->
                 </el-main>
             </el-container>
             <el-footer class="f_container">
@@ -119,7 +115,9 @@ export default {
 .el-main {
     padding: 0;
 }
-
+.el-footer{
+    padding: 0;
+}
 .a_container {
     overflow: auto;
     height: 100%;

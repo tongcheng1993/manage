@@ -23,7 +23,7 @@
             </el-button-group>
         </div>
         <div>
-            <el-table :data="page.records" v-loading="tableLoading" @row-click="openDetail">
+            <el-table :data="page.records" v-loading="tableLoading" height="250" @row-click="openDetail">
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="perName" label="名称"></el-table-column>
                 <el-table-column prop="codeSys" label="系统编码"></el-table-column>

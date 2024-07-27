@@ -13,22 +13,24 @@
                 <el-col :span="12">
                     <el-row>
                         <el-col>
-                            <el-button @click="openAddTopMenu()">增加顶级路由</el-button>
-                            <el-button @click="openNextMenu()">增加下级路由</el-button>
-                            <el-button @click="openEditMenu()">编辑当前路由</el-button>
+                            <el-button @click="openAddMenu()">新增路由</el-button>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col>
                             <el-form :model="dataOne">
                                 <el-form-item label="上级id">
-                                    <el-input v-model="dataOne.parentId"></el-input>
-                                </el-form-item>
-                                <el-form-item label="自身id">
-                                    <el-input v-model="dataOne.tableId"></el-input>
+                                    <el-select v-model="dataOne.parentId" placeholder="请选择">
+                                        <el-option v-for="item in dataList" :key="item.tableId" :label="item.name"
+                                            :value="item.tableId" :disabled="!item.showFlag">
+                                        </el-option>
+                                    </el-select>
                                 </el-form-item>
                                 <el-form-item label="名字">
                                     <el-input v-model="dataOne.name"></el-input>
+                                </el-form-item>
+                                <el-form-item label="标题">
+                                    <el-input v-model="dataOne.label"></el-input>
                                 </el-form-item>
                                 <el-form-item label="路径">
                                     <el-input v-model="dataOne.path"></el-input>
@@ -45,6 +47,11 @@
                                 <el-form-item label="排序">
                                     <el-input v-model="dataOne.sortNum"></el-input>
                                 </el-form-item>
+                                <el-form-item label="操作">
+                                    <el-button-group>
+                                        <el-button :disabled="!(dataOne.tableId)">保存</el-button>
+                                    </el-button-group>
+                                </el-form-item>
                             </el-form>
                         </el-col>
                     </el-row>
@@ -54,12 +61,31 @@
         <div v-if="addFlag">
             <el-dialog :visible.sync="addFlag" :title="dataTitle">
                 <el-form>
-                    <el-form-item label="上级id">
-                        <el-input v-model="dataOne.parentId"></el-input>
+                    <el-form-item label="上级">
+                        <el-select v-model="dataOne.parentId" placeholder="请选择">
+                            <el-option v-for="item in dataList" :key="item.tableId" :label="item.name"
+                                :value="item.tableId" :disabled="!item.showFlag">
+                            </el-option>
+                        </el-select>
+                        <el-form-item label="名字">
+                            <el-input v-model="dataOne.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="标题">
+                            <el-input v-model="dataOne.label"></el-input>
+                        </el-form-item>
+                        <el-form-item label="路径">
+                            <el-input v-model="dataOne.path"></el-input>
+                        </el-form-item>
+                        <el-form-item label="组件地址">
+                            <el-input v-model="dataOne.component"></el-input>
+                        </el-form-item>
+                        <el-form-item label="是否展示">
+                            <el-input v-model="dataOne.showFlag"></el-input>
+                        </el-form-item>
                     </el-form-item>
                     <el-form-item label="操作">
                         <el-button-group>
-                            <el-button @click="saveMenu()">保存</el-button>
+                            <el-button @click="addMenu">保存</el-button>
                             <el-button @click="addFlag = false">取消</el-button>
                         </el-button-group>
                     </el-form-item>
@@ -97,7 +123,7 @@ export default {
             dataOne: {},
             dataTitle: "",
             detailFlag: false,
-
+            addFlag: false,
 
 
 
@@ -127,8 +153,9 @@ export default {
                 let parent = {
                     tableId: "0",
                     path: '/',
-                    name: 'container',
+                    name: '根节点',
                     component: '/layout/container',
+                    showFlag: true,
                     children: []
                 }
                 this.dataList = res
@@ -144,35 +171,23 @@ export default {
             this.queryAllManageMenu();
         },
         // 保存路由
-        saveMenu() {
-            let parameter = this.dataDetail
+        addMenu() {
+            let parameter = this.dataOne
             addManageMenu(parameter).then((res) => {
                 if (res) {
-                    this.queryListMenu();
-                    this.dataDetailItemFlag = true;
+                    this.queryAllManageMenu();
+                    this.addFlag = false;
                 }
             }).catch((err) => {
 
             })
         },
-        // 打开增加顶级路由
-        openAddTopMenu() {
+        // 打开增加路由
+        openAddMenu() {
             this.dataOne = {
-                parentId: 0
+                parentId: "0"
             }
             this.addFlag = true;
-        },
-        // 打开下级路由
-        openNextMenu() {
-            let temp = this.dataDetail
-            this.dataDetail = {
-                parentId: temp.id
-            }
-            this.dataDetailItemFlag = false;
-        },
-        // 打开编辑路由
-        openEditMenu() {
-            this.dataDetailItemFlag = false;
         },
     },
 

@@ -5,8 +5,8 @@
                 <el-button type="primary" icon="el-icon-user" circle></el-button>
             </el-badge>
             <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="toUserInfoView()">账户信息</el-dropdown-item>
-                <el-dropdown-item @click.native="removeToken()">退出系统</el-dropdown-item>
+                <el-dropdown-item @click.native="toUserInfoView">账户信息</el-dropdown-item>
+                <el-dropdown-item @click.native="removeToken">退出系统</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
     </div>
@@ -47,8 +47,16 @@ export default {
             handler(newValue, oldValue) {
                 if (newValue && newValue.length > 0) {
                     let p = JSON.parse(newValue);
-                    if (p.obj) {
-                        alert(p.obj)
+                    if ("people" === p.businessType) {
+                        if("/topic/logout" === p.typePath){
+                            this.removeToken()
+                        }else if("/topic/chat" === p.typePath){
+                            alert(p.obj)
+                        }else{
+
+                        }
+                    }else{
+
                     }
                 }
             },

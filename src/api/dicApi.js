@@ -2,9 +2,9 @@ import {postForm, postJson} from '../axios'
 
 
 // 保存数据字典类别项
-export const saveDic = (params) => {
+export const addDic = (params) => {
     let parameter = params;
-    let url = "/api/sys/dic/saveDic";
+    let url = "/api/sys/dic/addDic";
     return postJson(url, parameter);
 };
 
@@ -41,9 +41,9 @@ export const getDicById = (params) => {
 
 
 // 保存数据子字典内容项
-export const saveDicItem = (params) => {
+export const addDicItem = (params) => {
     let parameter = params;
-    let url = "/api/sys/dic/saveDicItem";
+    let url = "/api/sys/dic/addDicItem";
     return postJson(url, parameter);
 };
 

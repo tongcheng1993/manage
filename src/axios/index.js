@@ -44,6 +44,8 @@ axiosOne.interceptors.response.use(response => {
     }
 }, error => {
     alert("未知问题 " + error);
+    // store.commit("del_token");
+    // window.location.reload();
     return Promise.reject(error)
 });
 
@@ -66,7 +68,7 @@ export const get = (url, parameter) => {
             method: 'get',
             params: parameter,
             headers: {
-                
+
             }
         })
     }

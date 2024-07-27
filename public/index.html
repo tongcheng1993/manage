@@ -42,11 +42,10 @@
     <script type="text/javascript" src="/js/vue-baidu-map.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
     <script type="text/javascript" src="/js/sockjs.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
     <script type="text/javascript" src="/js/stomp.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-    <script type="text/javascript"
-        src="/js/bpmn-modeler.production.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-    <% if (process.env.NODE_ENV=='production' ) { %>
-        <script type="text/javascript" src="/js/myJs.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
-        <% } %>
+    <script type="text/javascript" src="/js/bpmn-modeler.production.min.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+    <script type="text/javascript" src="/js/myJs.js?v=<%= htmlWebpackPlugin.options.date %>"></script>
+        
+    <% if (process.env.NODE_ENV=='production' ) { %><% } %>
 </body>
 
 </html>

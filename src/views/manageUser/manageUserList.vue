@@ -23,7 +23,7 @@
             </el-button-group>
         </div>
         <div>
-            <el-table :data="page.records" v-loading="tableLoading" @row-click="openDetail">
+            <el-table :data="page.records" v-loading="tableLoading" height="250" @row-click="openDetail">
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="userName" label="账号"></el-table-column>
                 <el-table-column prop="shortName" label="昵称"></el-table-column>
@@ -146,7 +146,7 @@
         </div>
         <div v-if="dialog_1">
             <el-dialog :visible.sync="dialog_1" :title="dataTitle">
-                <el-table ref="roleListTable" :data="roleList" @selection-change="selectChangeHandle">
+                <el-table ref="roleListTable" :data="roleList" height="250" @selection-change="selectChangeHandle">
                     <el-table-column type="selection" prop="id"></el-table-column>
                     <el-table-column prop="roleName" label="名称"></el-table-column>
                     <el-table-column prop="roleCode" label="编码"></el-table-column>
@@ -309,7 +309,7 @@ export default {
                     this.addFlag = false
                 }
             }).catch((err) => {
-               
+
             })
         },
         // 打开编辑
@@ -323,10 +323,8 @@ export default {
                 this.dataOne = res
                 this.updateFlag = true
             }).catch((err) => {
-            
+
             });
-
-
         },
         // 保存编辑
         update() {
@@ -337,7 +335,7 @@ export default {
                     this.updateFlag = false
                 }
             }).catch((err) => {
-               
+
             })
         },
         // 打开删除
@@ -459,8 +457,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.is-selected {
-    color: #1989FA;
-}
-</style>
+<style scoped></style>

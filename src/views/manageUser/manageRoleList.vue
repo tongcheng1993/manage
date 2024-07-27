@@ -8,7 +8,7 @@
                 <el-form-item label="编码">
                     <el-input v-model="page.roleCode"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item label="操作">
                     <el-button-group>
                         <el-button @click="queryPageData">查询</el-button>
                         <el-button @click="resetQuery">重置</el-button>
@@ -23,7 +23,7 @@
             </el-button-group>
         </div>
         <div>
-            <el-table :data="page.records" v-loading="tableLoading" @row-click="openDetail">
+            <el-table :data="page.records" v-loading="tableLoading" height="250" @row-click="openDetail">
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="roleName" label="名称"></el-table-column>
                 <el-table-column prop="roleCode" label="编码"></el-table-column>
@@ -36,7 +36,8 @@
                             </el-button>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item @click.native="openUpdate(scope)">编辑</el-dropdown-item>
-                                <el-dropdown-item @click.native="openRolePermissionRelation(scope)">授予后台方法</el-dropdown-item>
+                                <el-dropdown-item
+                                    @click.native="openRolePermissionRelation(scope)">授予后台方法</el-dropdown-item>
                                 <el-dropdown-item @click.native="openRoleMenuRelation(scope)">授予页面路由</el-dropdown-item>
                                 <el-dropdown-item @click.native="openDel(scope)">删除</el-dropdown-item>
                             </el-dropdown-menu>
@@ -138,7 +139,8 @@
 
         <div v-if="permissionDrawerFlag">
             <el-dialog :visible.sync="permissionDrawerFlag" :title="drawerTitle">
-                <el-table ref="permissionListTable" :data="permissionList" @selection-change="selectChangeHandle" height="250" >
+                <el-table ref="permissionListTable" :data="permissionList" @selection-change="selectChangeHandle"
+                    height="250">
                     <el-table-column type="selection">
                     </el-table-column>
                     <el-table-column prop="codeSys" label="系统编码">
@@ -159,7 +161,7 @@
             </el-dialog>
         </div>
         <div v-if="menuDrawerFlag">
-            <el-dialog :visible.sync="menuDrawerFlag"  :title="drawerTitle">
+            <el-dialog :visible.sync="menuDrawerFlag" :title="drawerTitle">
                 <el-tree :data="menuTree" show-checkbox node-key="tableId" ref="menuTree" default-expand-all
                     :props="defaultProps" :default-checked-keys="menuKeys" check-strictly="true"
                     @node-click="handleNodeClick">
@@ -169,8 +171,8 @@
                     </span>
                 </el-tree>
                 <el-button-group>
-                <el-button @click="saveRoleMenuRelation">保存</el-button>
-                <el-button @click="menuDrawerFlag = false">
+                    <el-button @click="saveRoleMenuRelation">保存</el-button>
+                    <el-button @click="menuDrawerFlag = false">
                         返回
                     </el-button>
                 </el-button-group>
@@ -185,6 +187,7 @@ import {
     queryListManageMenu,
     queryListManagePermission,
     bindRoleAndPermissionDelBefore,
+    bindRoleAndMenuDelBefore,
     getManageRoleById,
     addManageRole,
     updateManageRole,
@@ -210,10 +213,7 @@ export default {
                 size: 10,
                 orders: [],
                 records: [],
-
-
             },
-
             detailFlag: false,
             addFlag: false,
             delFlag: false,
@@ -308,7 +308,6 @@ export default {
             }).catch((err) => {
 
             });
-
         },
         // 打开新增
         openAdd() {
@@ -429,7 +428,7 @@ export default {
                 this.permissionKeys = res
                 this.permissionKeys.forEach((val) => {
                     this.permissionList.forEach((item) => {
-                        if (val.id === item.id) {
+                        if (val.tableId === item.tableId) {
                             this.$refs.permissionListTable.toggleRowSelection(item, true)
                         }
                     })
@@ -445,7 +444,7 @@ export default {
             this.bindRoleAndPermissionDelBeforeMo.permissionIdList = []
             if (this.permissionKeys) {
                 this.permissionKeys.forEach((val) => {
-                    this.bindRoleAndPermissionDelBeforeMo.permissionIdList.push(val.id)
+                    this.bindRoleAndPermissionDelBeforeMo.permissionIdList.push(val.tableId)
                 })
             }
             let parameter = this.bindRoleAndPermissionDelBeforeMo
@@ -454,7 +453,7 @@ export default {
                     this.permissionDrawerFlag = false
                 }
             }).catch((error) => {
-                console.log(error)
+
             })
         },
         openRoleMenuRelation(scope) {
@@ -462,12 +461,12 @@ export default {
             if (this.menuKeys && this.menuKeys.length > 0) {
                 this.menuKeys = []
             }
-            // if (this.$refs.tree) {
-            //     this.$refs.tree.setCheckedKeys([])
-            // }
-            this.roleId = scope.row.id
+            if (this.$refs.menuTree) {
+                this.$refs.menuTree.setCheckedKeys([])
+            }
+            this.roleId = scope.row.tableId
             let parameter = {
-                roleId: scope.row.id
+                roleId: scope.row.tableId
             }
             queryListManageMenu(parameter).then((res) => {
                 this.menuKeys = [];
@@ -478,8 +477,8 @@ export default {
             })
         },
         saveRoleMenuRelation() {
-            let checkedKeys = this.$refs.tree.getCheckedKeys();
-            let halfCheckedKeys = this.$refs.tree.getHalfCheckedKeys();
+            let checkedKeys = this.$refs.menuTree.getCheckedKeys();
+            let halfCheckedKeys = this.$refs.menuTree.getHalfCheckedKeys();
             for (let i in halfCheckedKeys) {
                 checkedKeys.push(halfCheckedKeys[i]);
             }
@@ -487,7 +486,7 @@ export default {
                 roleId: this.roleId,
                 menuIdList: checkedKeys,
             };
-            saveRoleMenuRelation(parameter).then((res) => {
+            bindRoleAndMenuDelBefore(parameter).then((res) => {
                 this.menuDrawerFlag = false
             }).catch((error) => {
 
