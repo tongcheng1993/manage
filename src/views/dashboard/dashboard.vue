@@ -1,49 +1,40 @@
 <template>
     <div class="view_div">
-        {{name}}
+        {{ name }}
     </div>
 </template>
 
 <script>
 
-    export default {
-        name: "dashboard",
-        components: {
+export default {
+    name: "dashboard",
+    components: {},
+    props: {},
+    computed: {},
+    watch: {},
+    methods: {
+        async toNextPage(to) {
+            await this.$router.push({
+                path: to,
+                params: {}
+            })
+        },
+        init() {
 
         },
-        props: {},
-        methods: {
-            async toNextPage(to) {
-                await this.$router.push({
-                    path: to,
-                    params: {}
-                })
-            },
-            init() {
+    },
+    data() {
+        return {
+            name: 'dashboard',
 
-            },
-        },
-        computed: {},
-        watch: {},
-        data() {
-            return {
-                name: 'dashboard',
-                page: {
-                    total: 0,
-                    current: 0,
-                    size: 10,
-                    orders: []
-                },
-            }
-        },
-        mounted() {
-            this.init()
-        },
-        beforeDestroy() {
         }
+    },
+    mounted() {
+        this.init()
+    },
+    beforeDestroy() {
     }
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

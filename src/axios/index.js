@@ -13,12 +13,7 @@ axiosOne.interceptors.response.use(response => {
         if (response.data.success) {
             return response.data.result;
         } else {
-            // 页面有提醒 方法有返回内容 例如：用户名密码错误  在页面上提醒后 在err中返回提醒，方法catch到提醒后将登录按钮重置为可点击状态
-            ELEMENT.Message({
-                showClose: true,
-                message: response.data.message,
-                type: "warning"
-            })
+            alert(response.data.message);
             return Promise.reject(response.data.message)
         }
     } else if (response.data.code === 30000) {
@@ -154,7 +149,7 @@ export const postJson = (url, parameter) => {
 export const downFile = (url, parameter) => {
     let token = store.state.token;
     if (token) {
-        return axiosOne({
+        return axiosFile({
             url: url,
             method: 'post',
             data: parameter,
@@ -163,7 +158,7 @@ export const downFile = (url, parameter) => {
             }
         })
     } else {
-        return axiosOne({
+        return axiosFile({
             url: url,
             method: 'post',
             data: parameter,

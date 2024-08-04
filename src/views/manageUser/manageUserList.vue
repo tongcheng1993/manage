@@ -259,8 +259,6 @@ export default {
             this.tableLoading = true
             queryPageManageUser(this.page).then((res) => {
                 this.page.total = res.total
-                this.page.size = res.size
-                this.page.current = res.current
                 this.page.records = res.records
                 this.tableLoading = false
             }).catch((err) => {

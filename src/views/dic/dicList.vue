@@ -193,7 +193,7 @@ export default {
             dataTitle: "",
 
             dicItemListFlag: false,
-            dicItemListLoading:false,
+            dicItemListLoading: false,
             dicItemList: [],
 
         };

@@ -2,23 +2,11 @@
     <div>
         <!--        搜索-->
         <div>
-            <el-form>
-                <el-row>
-                    <el-col>
-                        <el-form-item>
-                            <el-input v-model="dataQo.fileName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-button type="primary" @click="">查询</el-button>
-                        <el-button type="primary" @click="">重置</el-button>
-                    </el-col>
-                </el-row>
-            </el-form>
+
         </div>
         <!--        新增删除-->
         <div>
-            <el-button type="primary" @click="">批量删除</el-button>
+
         </div>
         <!--        列表内容-->
         <div>
@@ -42,129 +30,117 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="page.total"
-                    :page-size="page.size"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="page.current"
-                    :page-sizes="[10, 50, 100]"
-            >
+            <el-pagination layout="total, sizes, prev, pager, next, jumper" :total="page.total" :page-size="page.size"
+                @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.current"
+                :page-sizes="[10, 50, 100]">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
-    import {downloadFileTrue, queryPageFile, delFile} from "../../api/fileApi";
+import { downloadFileTrue, queryPageFile, delFile } from "../../api/fileApi";
 
-    export default {
-        name: "fileList",
-        components: {},
-        props: {},
-        methods: {
-            async toNextPage(to) {
-                await this.$router.push({
-                    path: to,
-                    params: {},
-                });
-            },
-            init() {
-                this.queryPageFile();
-            },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
-            },
-            handlePreview(file) {
-                console.log(file);
-            },
-            handleExceed(files, fileList) {
-                this.$message.warning(
-                    `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
-                    files.length + fileList.length
-                        } 个文件`
-                );
-            },
-            beforeRemove(file, fileList) {
-                return this.$confirm(`确定移除 ${file.name}？`);
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.dataQo.size = val;
-                this.queryPageFile();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.dataQo.current = val;
-                this.queryPageFile();
-            },
-            queryPageFile() {
-                let parameter = this.dataQo;
-                queryPageFile(parameter)
-                    .then((res) => {
-                        this.page = res;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            },
-            downloadFileThis(scope) {
-                downloadFileTrue(scope.row)
-            },
-            delFile(scope) {
-                let parameter = {
-                    id: scope.row.id,
-                };
-                delFile(parameter).then((res) => {
-                    if (res) {
-                        this.queryPageFile();
-                    }
-                }).catch((error) => {
-                    console.log(error)
+export default {
+    name: "fileList",
+    components: {},
+    props: {},
+    computed: {
+        uploadHeader() {
+            return { "Tc-Token": this.$store.state.token }
+        }
+    },
+    watch: {
+
+    },
+    methods: {
+        async toNextPage(to) {
+            await this.$router.push({
+                path: to,
+                params: {},
+            });
+        },
+        init() {
+            this.queryPageFile();
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        handleExceed(files, fileList) {
+            this.$message.warning(
+                `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length
+                } 个文件`
+            );
+        },
+        beforeRemove(file, fileList) {
+            return this.$confirm(`确定移除 ${file.name}？`);
+        },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.dataQo.size = val;
+            this.queryPageFile();
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+            this.dataQo.current = val;
+            this.queryPageFile();
+        },
+        queryPageFile() {
+            let parameter = this.dataQo;
+            queryPageFile(parameter)
+                .then((res) => {
+                    this.page.total = res.total
+                    this.page.records = res.records
                 })
-            },
+                .catch((err) => {
+                    console.log(err);
+                });
         },
-        computed: {
-            uploadHeader() {
-                return {"Tc-Token": this.$store.state.token}
-            }
+        downloadFileThis(scope) {
+            downloadFileTrue(scope.row)
         },
-        watch: {
-            page: {
-                handler(newValue, oldValue) {
-                    console.log(newValue);
-                    console.log(oldValue);
-                },
-                deep: true,
-            },
-        },
-        data() {
-            return {
-                name: "fileList",
-                page: {
-                    total: 0,
-                    current: 0,
-                    size: 10,
-                    orders: [],
-                },
-                dataQo: {
-                    current: 0,
-                    size: 10,
-                    orders: [],
-                    fileName: "",
-                },
-                fileList: [],
-                dialogFlag: false,
+        delFile(scope) {
+            let parameter = {
+                id: scope.row.id,
             };
+            delFile(parameter).then((res) => {
+                if (res) {
+                    this.queryPageFile();
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
         },
-        mounted() {
-            this.init();
-        },
-        beforeDestroy() {
-        },
-    };
+    },
+
+    data() {
+        return {
+            name: "fileList",
+            page: {
+                total: 0,
+                current: 0,
+                size: 10,
+                orders: [],
+            },
+            dataQo: {
+                current: 0,
+                size: 10,
+                orders: [],
+                fileName: "",
+            },
+            fileList: [],
+            dialogFlag: false,
+        };
+    },
+    mounted() {
+        this.init();
+    },
+    beforeDestroy() {
+    },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

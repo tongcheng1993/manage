@@ -49,7 +49,7 @@
                                 </el-form-item>
                                 <el-form-item label="操作">
                                     <el-button-group>
-                                        <el-button :disabled="!(dataOne.tableId)">保存</el-button>
+                                        <el-button :disabled="!(dataOne.tableId)" @click="updateDataOne" v-loading="!updateFlag">保存</el-button>
                                     </el-button-group>
                                 </el-form-item>
                             </el-form>
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { addManageMenu, queryListManageMenu } from "../../api/manageUserApi";
+import { addManageMenu, updateManageMenu, queryListManageMenu } from "../../api/manageUserApi";
 import { createTree } from "../../util/treeUtil";
 
 export default {
@@ -108,33 +108,6 @@ export default {
     computed: {},
     // 本页面监听属性
     watch: {},
-    // 数据开始绑定
-    mounted() {
-
-        this.init();
-    },
-    beforeDestroy() {
-
-    },
-    data() {
-        return {
-            dataList: [],
-            treeList: [],
-            dataOne: {},
-            dataTitle: "",
-            detailFlag: false,
-            addFlag: false,
-
-
-
-            defaultProps: {
-                children: "children",
-                label: "name",
-            },
-        };
-    },
-
-
     methods: {
         // 跳转页面
         async toNextPage(to) {
@@ -145,6 +118,7 @@ export default {
         },
         // 选择路由
         handleNodeClick(data) {
+            this.updateFlag = true
             this.dataOne = data;
         },
         // 查询所有路由
@@ -170,6 +144,17 @@ export default {
         init() {
             this.queryAllManageMenu();
         },
+        updateDataOne() {
+            this.updateFlag = false
+            updateManageMenu(this.dataOne).then((res)=>{
+                if(res){
+                    this.updateFlag = true
+                    this.queryAllManageMenu();
+                }
+            }).catch((err)=>{
+
+            })
+        },
         // 保存路由
         addMenu() {
             let parameter = this.dataOne
@@ -190,6 +175,34 @@ export default {
             this.addFlag = true;
         },
     },
+    // 数据开始绑定
+    mounted() {
+
+        this.init();
+    },
+    beforeDestroy() {
+
+    },
+    data() {
+        return {
+            dataList: [],
+            treeList: [],
+            dataOne: {},
+            dataTitle: "",
+            detailFlag: false,
+            addFlag: false,
+            updateFlag:false,
+
+
+            defaultProps: {
+                children: "children",
+                label: "name",
+            },
+        };
+    },
+
+
+
 
 };
 </script>

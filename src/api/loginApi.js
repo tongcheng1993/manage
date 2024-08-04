@@ -17,3 +17,7 @@ export const getMenu = (parameter) =>{
 }
 
 
+export const logout = (parameter) =>{
+    let url='/api/manage/manageUser/logout';
+    return postJson(url,parameter);
+}

@@ -14,7 +14,7 @@
 
 <script>
 import { startWs, stopWs } from '@/ws/index.js'
-
+import { logout } from '@/api/loginApi.js'
 export default {
     name: "zfjUserIcon",
     components: {},
@@ -48,14 +48,14 @@ export default {
                 if (newValue && newValue.length > 0) {
                     let p = JSON.parse(newValue);
                     if ("people" === p.businessType) {
-                        if("/topic/logout" === p.typePath){
+                        if ("/topic/logout" === p.typePath) {
                             this.removeToken()
-                        }else if("/topic/chat" === p.typePath){
+                        } else if ("/topic/chat" === p.typePath) {
                             alert(p.obj)
-                        }else{
+                        } else {
 
                         }
-                    }else{
+                    } else {
 
                     }
                 }
@@ -64,11 +64,6 @@ export default {
             immediate: true,
         }
     },
-    data() {
-        return {
-            wsCron: null,
-        };
-    },
     methods: {
         async toNextPage(to, query) {
             await this.$router.push({
@@ -76,11 +71,11 @@ export default {
                 query: query,
             });
         },
-        cronMethod(){
+        cronMethod() {
             console.log('one cron')
             startWs()
         },
-        openCron(){
+        openCron() {
             console.log('open cron')
             this.wsCron = setInterval(this.cronMethod, 5000);
         },
@@ -90,19 +85,30 @@ export default {
         destroy() {
             stopWs();
             if (this.wsCron) {
-                clearInterval(this.timerID);
+                clearInterval(this.wsCron);
             }
         },
         toUserInfoView() {
             this.toNextPage("/userAccount");
         },
         removeToken() {
-            this.$store.commit("del_token");
-            location.reload();
+            logout().then((res) => {
+                if (res) {
+                    this.$store.commit("del_token");
+                    location.reload();
+                }
+            }).catch((err) => {
+
+            })
         },
     },
+    data() {
+        return {
+            wsCron: null,
+        };
+    },
+    
     mounted() {
-        
         this.init();
     },
     beforeDestroy() {

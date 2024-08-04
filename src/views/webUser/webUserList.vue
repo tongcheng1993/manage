@@ -80,7 +80,7 @@
 </template>
 
 <script>
-    import {queryPageUser} from '../../api/userApi'
+    import {queryPageWebUser} from '@/api/userApi'
 
     export default {
         name: "userList",

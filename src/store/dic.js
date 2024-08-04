@@ -14,30 +14,27 @@ export default {
     actions: {
         actionsInitDic(context, data) {
             if (data) {
-                if (context.state.dic[data] && context.state.dic[data].length > 0) {
-
-                } else {
-                    let parameter = {
-                        dicCode: data
-                    }
-                    getDicByCode(parameter).then((res) => {
-                        if (res) {
-                            let vo = {
-                                code: res.dicCode,
-                                list: res.dicItemVoList
-                            }
-                            context.commit('setDicItemList', vo)
-                        }
-                    }).catch((err) => {
-                        console.log(err)
-                    })
+                let parameter = {
+                    dicCode: data
                 }
+                getDicByCode(parameter).then((res) => {
+                    if (res) {
+                        let vo = {
+                            code: res.dicCode,
+                            list: res.dicItemVoList
+                        }
+                        context.commit('setDicItemList', vo)
+                    }
+                }).catch((err) => {
+
+                })
+
             } else {
                 let parameter = {}
                 getAllDicDetail(parameter).then((res) => {
                     if (res) {
                         for (let i = 0; i < res.length; i++) {
-                            let item = res[res]
+                            let item = res[i]
                             let vo = {
                                 code: item.dicCode,
                                 list: item.dicItemVoList
@@ -46,7 +43,7 @@ export default {
                         }
                     }
                 }).catch((err) => {
-                    console.log(err)
+
                 })
             }
         }
