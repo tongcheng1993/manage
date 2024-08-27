@@ -6,7 +6,7 @@ export const addManageUser = (parameter) => {
 }
 export const delManageUser = (parameter) => {
     let url = '/api/manage/manageUser/delManageUser';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 
 export const updateManageUser = (parameter) => {
@@ -23,7 +23,7 @@ export const queryPageManageUser = (parameter) => {
 }
 export const getManageUserById = (parameter) => {
     let url = '/api/manage/manageUser/getManageUserById';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 
 
@@ -40,7 +40,7 @@ export const addManageRole = (parameter) => {
 }
 export const delManageRole = (parameter) => {
     let url = '/api/manage/manageUser/delManageRole';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 
 export const updateManageRole = (parameter) => {
@@ -57,7 +57,7 @@ export const queryPageManageRole = (parameter) => {
 }
 export const getManageRoleById = (parameter) => {
     let url = '/api/manage/manageUser/getManageRoleById';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 
 
@@ -72,7 +72,7 @@ export const addManagePermission = (parameter) => {
 }
 export const delManagePermission = (parameter) => {
     let url = '/api/manage/manageUser/delManagePermission';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 export const updateManagePermission = (parameter) => {
     let url = '/api/manage/manageUser/updateManagePermission';
@@ -88,7 +88,7 @@ export const queryPageManagePermission = (parameter) => {
 }
 export const getManagePermissionById = (parameter) => {
     let url = '/api/manage/manageUser/getManagePermissionById';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 
 
@@ -106,7 +106,7 @@ export const addManageMenu = (parameter) => {
 }
 export const delManageMenu = (parameter) => {
     let url = '/api/manage/manageUser/delManageMenu';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 export const updateManageMenu = (parameter) => {
     let url = '/api/manage/manageUser/updateManageMenu';
@@ -118,7 +118,7 @@ export const queryListManageMenu = (parameter) => {
 }
 export const getManageMenuById = (parameter) => {
     let url = '/api/manage/manageUser/getManageMenuById';
-    return postJson(url, parameter);
+    return postForm(url, parameter);
 }
 
 

@@ -95,12 +95,16 @@ export const postForm = (url, parameter) => {
 
 
 export const postFormFile = (url, parameter) => {
+    let params = new FormData()
+    for (let one in parameter) {
+        params.append(one, parameter[one])
+    }
     let token = store.state.token;
     if (token) {
         return axiosOne({
             url: url,
             method: 'post',
-            data: parameter,
+            data: params,
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Tc-Token': token
@@ -110,7 +114,7 @@ export const postFormFile = (url, parameter) => {
         return axiosOne({
             url: url,
             method: 'post',
-            data: parameter,
+            data: params,
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
